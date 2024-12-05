@@ -1,10 +1,11 @@
-// const {
-//   capitalise,
-// } = require("./index");
+const {
+  Ship,
+} = require("./auxFunctions");
 
-// test("Capitalise test", () => {
-//   expect(capitalise("jonathan")).toBe("Jonathan");
-// });
+test("ship test 1", () => {
+    const shipObj = new Ship();
+  expect(shipObj).toBeInstanceOf(Ship);
+});
 
 // test("analyseArray test)", () => {
 //   expect(analyseArrayObject.analyseArray([1, 8, 3, 4, 2, 6])).toEqual({
