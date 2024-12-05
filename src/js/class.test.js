@@ -1,6 +1,6 @@
 const {
-  Ship,
-} = require("./auxFunctions");
+  Ship, Player, Gameboard
+} = require("./class");
 
 // Ship Class related testing:
 
@@ -58,4 +58,22 @@ test('Ship(5) is not sunk after being hit 4 times test', () => {
   expect(ship.isSunk()).toBe(false);
 });
 
+test("Player class should exist", () => {
+  const playerObj = new Player();
+  expect(playerObj).toBeInstanceOf(Player);
+});
 
+test('computer Player attribute should exist in Player', () => {
+  const playerObj = new Player("Jon", "CPU");
+  expect(playerObj.computer).toBeDefined();
+});
+
+test("Gameboard class should exist", () => {
+  const gameboardObj = new Gameboard();
+  expect(gameboardObj).toBeInstanceOf(Gameboard);
+});
+
+test('Y axis attribute should exist in Gameboard', () => {
+  const gameboardObj = new Gameboard(10, 10);
+  expect(gameboardObj.axisY).toBeDefined();
+});
