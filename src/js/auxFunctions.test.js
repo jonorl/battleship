@@ -2,6 +2,8 @@ const {
   Ship,
 } = require("./auxFunctions");
 
+// Ship Class related testing:
+
 test("ship class should exist", () => {
     const shipObj = new Ship();
   expect(shipObj).toBeInstanceOf(Ship);
@@ -17,11 +19,43 @@ test('shipSunk defaults to false', () => {
   expect(ship.sunk).toBe(false);
 });
 
-// test("analyseArray test)", () => {
-//   expect(analyseArrayObject.analyseArray([1, 8, 3, 4, 2, 6])).toEqual({
-//     average: 4,
-//     min: 1,
-//     max: 8,
-//     length: 6,
-//   });
-// });
+test('Ship hit method exists', () => {
+  const ship = new Ship(5);
+  expect(ship.hit).toBeDefined();
+});
+
+test('Ship hit works', () => {
+  const ship = new Ship(5);
+  ship.hit(1)
+  expect(ship.numberOfHits).toBe(1);
+});
+
+test('Ship(5) is sunk after being hit 5 times test', () => {
+  const ship = new Ship(5);
+  ship.hit(1);
+  ship.isSunk();
+  ship.hit(1);
+  ship.isSunk();
+  ship.hit(1);
+  ship.isSunk();
+  ship.hit(1);
+  ship.isSunk();
+  ship.hit(1);
+  ship.isSunk();
+  expect(ship.isSunk()).toBe(true);
+});
+
+test('Ship(5) is not sunk after being hit 4 times test', () => {
+  const ship = new Ship(5);
+  ship.hit(1);
+  ship.isSunk();
+  ship.hit(1);
+  ship.isSunk();
+  ship.hit(1);
+  ship.isSunk();
+  ship.hit(1);
+  ship.isSunk();
+  expect(ship.isSunk()).toBe(false);
+});
+
+
