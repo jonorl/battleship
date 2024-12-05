@@ -1,0 +1,28 @@
+/* default css */
+
+* {
+  background-color: black;
+  color: aliceblue;
+  font-size: large;
+  font-family: "Roboto";
+}
+
+.menuButtonImage {
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.menuButtonSubtree {
+  margin-left: 6vh;
+  display: none;
+  position: absolute;
+  min-width: 160px;
+  overflow: auto;
+  z-index: 1;
+}
+
+.visible {
+  display: block;
+}
