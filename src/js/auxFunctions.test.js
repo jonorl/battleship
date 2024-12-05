@@ -2,9 +2,19 @@ const {
   Ship,
 } = require("./auxFunctions");
 
-test("ship test 1", () => {
+test("ship class should exist", () => {
     const shipObj = new Ship();
   expect(shipObj).toBeInstanceOf(Ship);
+});
+
+test('shipLen attribute should exist', () => {
+  const ship = new Ship(5);
+  expect(ship.shipLen).toBeDefined();
+});
+
+test('shipSunk defaults to false', () => {
+  const ship = new Ship(5);
+  expect(ship.sunk).toBe(false);
 });
 
 // test("analyseArray test)", () => {

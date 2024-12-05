@@ -1,6 +1,6 @@
 // Module import
 
 import "../css/style.css";
-import "./auxFunctions"
+import "./auxFunctions.js";
 
  
