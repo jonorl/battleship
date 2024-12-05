@@ -1,7 +1,7 @@
 {
-  "name": "jest-testing",
+  "name": "battleship",
   "version": "1.0.0",
-  "description": "Jest testing for Th Odin Project",
+  "description": "Battleship game for The Odin Project",
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -295,5 +295,13 @@
     "which": "^2.0.2",
     "wildcard": "^2.0.1",
     "ws": "^8.18.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonorl/battleship.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jonorl/battleship/issues"
+  },
+  "homepage": "https://github.com/jonorl/battleship#readme"
 }

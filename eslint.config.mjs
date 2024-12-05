@@ -10,3 +10,7 @@ export default {
     "no-undef": 1
   },
 };
+
+module.exports = {
+  ignorePatterns: ['**/__tests__/*.js', '**/tests/*.js'],
+};
