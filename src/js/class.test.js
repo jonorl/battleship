@@ -59,17 +59,17 @@ test("Ship(5) is not sunk after being hit 4 times test", () => {
 // Gameboard Class related testing:
 
 test("Gameboard class should exist", () => {
-  const gameboardObj = new Gameboard(10 ,10);
+  const gameboardObj = new Gameboard(10, 10);
   expect(gameboardObj).toBeInstanceOf(Gameboard);
 });
 
 test("Y axis attribute should exist in Gameboard", () => {
-  const gameboardObj = new Gameboard(10 ,10);
+  const gameboardObj = new Gameboard(10, 10);
   expect(gameboardObj.axisY).toBeDefined();
 });
 
 test("board creates a 10x10 grid", () => {
-  const gameboardObj = new Gameboard(10 ,10);
+  const gameboardObj = new Gameboard(10, 10);
   expect(gameboardObj.axisX).toBe(10);
   expect(gameboardObj.axisY).toBe(10);
 });
@@ -85,9 +85,7 @@ test("board takes 10x10 values", () => {
 test("Board places ship in coordinates", () => {
   const ship = new Ship(5, "horizontal");
   const player = new Player("Jon", "human");
-  expect(
-    player.playerGameboard.placeShips(ship, 3, 4, player)
-  ).toBeDefined();
+  expect(player.playerGameboard.placeShips(ship, 3, 4, player)).toBeDefined();
 });
 
 test("Check if ship created returns out of bounds", () => {
@@ -117,7 +115,9 @@ test("Check if ship overlapping is allowed", () => {
   const ship2 = new Ship(5, "horizontal");
   const player = new Player("Jon", "human");
   player.playerGameboard.placeShips(ship1, 3, 4, player);
-  expect(player.playerGameboard.placeShips(ship2, 3, 4, player)).toBe('overlapping ships are not allowed');
+  expect(player.playerGameboard.placeShips(ship2, 3, 4, player)).toBe(
+    "overlapping ships are not allowed"
+  );
 });
 
 test("Ship recieves attack", () => {
@@ -174,4 +174,15 @@ test("More than one ship", () => {
 test("Player class should exist", () => {
   const playerObj = new Player();
   expect(playerObj).toBeInstanceOf(Player);
+});
+
+test("Game Over for player 2", () => {
+  const player1 = new Player("Jon", "human");
+  const player2 = new Player("Asus", "cpu");
+  const ship1 = new Ship(5, "vertical");
+  const ship2 = new Ship(2, "horizontal");
+  player1.playerGameboard.placeShips(ship1, 3, 4, player1);
+  player2.playerGameboard.placeShips(ship2, 5, 7, player2);
+  player2.playerGameboard.receiveAttack(5, 7);
+  expect(player2.playerGameboard.receiveAttack(6, 7)).toBe("Game Over");
 });

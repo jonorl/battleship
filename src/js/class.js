@@ -1,14 +1,23 @@
+// classes
+
+// Begin your app by creating the Ship class/factory (your choice).
+
 export class Ship {
   constructor(shipLen, direction, numberOfHits = 0, sunk = false) {
+    // Your ‘ships’ will be objects that include their length, the number of times
+    // they’ve been hit and whether or not they’ve been sunk.
     this.shipLen = shipLen;
     this.direction = direction;
     this.numberOfHits = numberOfHits;
     this.sunk = sunk;
   }
+  // Ships should have a hit() function that increases the number of ‘hits’ in your ship.
   hit() {
     this.numberOfHits++;
     this.isSunk();
   }
+  // isSunk() should be a function that calculates whether a ship is considered sunk based
+  // on its length and the number of hits it has received.
   isSunk() {
     if (this.numberOfHits === this.shipLen) {
       return (this.sunk = true);
@@ -23,6 +32,7 @@ export class Gameboard {
     this.board = this.createBoard();
   }
 
+  // Create a Gameboard class/factory.
   createBoard() {
     let horizontalLength = [];
     for (let i = 0; i < this.axisX; i++) {
@@ -43,9 +53,12 @@ export class Gameboard {
     return board;
   }
 
+  // Gameboards should be able to place ships at specific coordinates by calling the ship factory or class.
   placeShips(ship, coordinateX, coordinateY, player) {
+    // validation array to check if all tiles before placing ships.
     let validation = [];
     if (ship.direction === "horizontal") {
+      // check if ship placement doesn't go out of bounds
       if (coordinateX - 1 + ship.shipLen < this.axisX) {
         for (let i = coordinateX; i < coordinateX + ship.shipLen; i++) {
           if (
@@ -68,11 +81,13 @@ export class Gameboard {
         }
       } else return "Error placement out of bounds";
     } else if (ship.direction === "vertical") {
+      // check if ship placement doesn't go out of bounds
       if (coordinateY - 1 + ship.shipLen < this.axisY) {
         for (let i = coordinateY; i < coordinateY + ship.shipLen; i++) {
           if (
             typeof player.playerGameboard.board[i][coordinateX] !== "object"
           ) {
+            // checking for ship overlap
             validation.push(true);
           } else validation.push(false);
         }
@@ -92,6 +107,7 @@ export class Gameboard {
     return this.board;
   }
 
+  // helper function as placeShips is already too bloated
   actualPlacingOfShips(ship, coordinateX, coordinateY, player) {
     if (ship.direction === "horizontal") {
       for (let i = coordinateX; i < coordinateX + ship.shipLen; i++) {
@@ -104,6 +120,9 @@ export class Gameboard {
     }
   }
 
+  //Gameboards should have a receiveAttack function that takes a pair of coordinates, determines
+  //whether or not the attack hit a ship and then sends the ‘hit’ function to the correct ship, or
+  //records the coordinates of the missed shot.
   receiveAttack(x, y) {
     if (typeof this.board[y][x] === "object") {
       this.board[y][x].hit(); // this.board[y][x] is the same as ship
@@ -113,6 +132,7 @@ export class Gameboard {
     } else return true;
   }
 
+  // Gameboards should be able to report whether or not all of their ships have been sunk.
   checkGameOver() {
     let checkArray = [];
     this.board.forEach((elementX) => {
@@ -128,6 +148,11 @@ export class Gameboard {
     }
   }
 }
+
+// Create a Player class/factory.
+
+//There will be two types of players in the game, ‘real’ players and ‘computer’ players.
+//Each player object should contain its own gameboard.
 
 export class Player {
   constructor(playerName, playerType, playerGameboard = new Gameboard(10, 10)) {
