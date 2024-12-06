@@ -46,30 +46,46 @@ export class Gameboard {
   placeShips(ship, coordinateX, coordinateY, player, board) {
     if (ship.direction === "horizontal") {
       if (coordinateX - 1 + ship.shipLen < this.axisX) {
-        for (let i = coordinateX; i < (coordinateX + ship.shipLen); i++) {
+        for (let i = coordinateX; i < coordinateX + ship.shipLen; i++) {
           if (player.playerType === "human") {
             board.board[coordinateY][i] = ship;
-          } 
+          }
         }
       } else return "Error placement out of bounds";
     } else if (ship.direction === "vertical") {
       if (coordinateY - 1 + ship.shipLen < this.axisY) {
-        for (let i = coordinateY; i < (coordinateY + ship.shipLen); i++) {
+        for (let i = coordinateY; i < coordinateY + ship.shipLen; i++) {
           if (player.playerType === "human") {
             board.board[i][coordinateX] = ship;
           }
         }
       } else return "Error placement out of bounds";
     }
-    return board
+    return board;
   }
 
   receiveAttack(x, y) {
-    if(typeof(this.board[y][x]) === "object"){
+    if (typeof this.board[y][x] === "object") {
       this.board[y][x].hit(); // this.board[y][x] is the same as ship
+    } else this.board[y][x] = 1; // 0 for not yet hit, 1 for hit water
+    if (this.checkGameOver() === "Game Over"){
+      return "Game Over"
     }
-    else this.board[y][x] = 1
-    return true
+    else return true;
+  }
+
+  checkGameOver() {
+    let checkArray = [];
+    this.board.forEach((elementX) => {
+      elementX.forEach((elementY) => {
+        if (typeof elementY === "object" && elementY.sunk === true) {
+          checkArray.push(true);
+        } else if(typeof elementY === "object" && elementY.sunk === false) checkArray.push(false);
+      });
+    });
+    if(checkArray.every(item => item === true)){
+      return "Game Over"
+    }
   }
 }
 
@@ -77,6 +93,6 @@ export class Player {
   constructor(playerName, playerType, playerGameboard = new Gameboard()) {
     this.playerName = playerName;
     this.playerType = playerType;
-    this.payerGameboard = playerGameboard
+    this.payerGameboard = playerGameboard;
   }
 }
