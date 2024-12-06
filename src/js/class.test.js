@@ -17,44 +17,44 @@ test("shipSunk defaults to false", () => {
   expect(ship.sunk).toBe(false);
 });
 
-// test("Ship hit method exists", () => {
-//   const ship = new Ship(5);
-//   expect(ship.hit).toBeDefined();
-// });
+test("Ship hit method exists", () => {
+  const ship = new Ship(5);
+  expect(ship.hit).toBeDefined();
+});
 
-// test("Ship hit works", () => {
-//   const ship = new Ship(5);
-//   ship.hit(1);
-//   expect(ship.numberOfHits).toBe(1);
-// });
+test("Ship hit works", () => {
+  const ship = new Ship(5);
+  ship.hit(1);
+  expect(ship.numberOfHits).toBe(1);
+});
 
-// test("Ship(5) is sunk after being hit 5 times test", () => {
-//   const ship = new Ship(5);
-//   ship.hit(1);
-//   ship.isSunk();
-//   ship.hit(1);
-//   ship.isSunk();
-//   ship.hit(1);
-//   ship.isSunk();
-//   ship.hit(1);
-//   ship.isSunk();
-//   ship.hit(1);
-//   ship.isSunk();
-//   expect(ship.isSunk()).toBe(true);
-// });
+test("Ship(5) is sunk after being hit 5 times test", () => {
+  const ship = new Ship(5);
+  ship.hit(1);
+  ship.isSunk();
+  ship.hit(1);
+  ship.isSunk();
+  ship.hit(1);
+  ship.isSunk();
+  ship.hit(1);
+  ship.isSunk();
+  ship.hit(1);
+  ship.isSunk();
+  expect(ship.isSunk()).toBe(true);
+});
 
-// test("Ship(5) is not sunk after being hit 4 times test", () => {
-//   const ship = new Ship(5);
-//   ship.hit(1);
-//   ship.isSunk();
-//   ship.hit(1);
-//   ship.isSunk();
-//   ship.hit(1);
-//   ship.isSunk();
-//   ship.hit(1);
-//   ship.isSunk();
-//   expect(ship.isSunk()).toBe(false);
-// });
+test("Ship(5) is not sunk after being hit 4 times test", () => {
+  const ship = new Ship(5);
+  ship.hit(1);
+  ship.isSunk();
+  ship.hit(1);
+  ship.isSunk();
+  ship.hit(1);
+  ship.isSunk();
+  ship.hit(1);
+  ship.isSunk();
+  expect(ship.isSunk()).toBe(false);
+});
 
 // Gameboard Class related testing:
 
@@ -87,7 +87,7 @@ test("Board places ship in coordinates", () => {
 
   const gameboardObj = new Gameboard(10, 10);
   const ship = new Ship(5, "horizontal")
-  const player = new Player("Jon")
+  const player = new Player("Jon", "human")
   player.human === true
   expect(gameboardObj.placeShips(ship, 3, 4, player, gameboardObj)).toBeDefined();
 });
@@ -96,7 +96,7 @@ test("Check if ships are in the right places (horizontal 5)", () => {
 
   const gameboardObj = new Gameboard(10, 10);
   const ship = new Ship(5, "horizontal");
-  const player = new Player("Jon");
+  const player = new Player("Jon", "human");
   player.human === true;
   gameboardObj.placeShips(ship, 3, 4, player, gameboardObj)
   expect(gameboardObj.board[4][7]).toBeInstanceOf(Object);
@@ -106,7 +106,7 @@ test("Check if ships are in the right places (vertical 5)", () => {
 
   const gameboardObj = new Gameboard(10, 10);
   const ship = new Ship(5, "vertical");
-  const player = new Player("Jon");
+  const player = new Player("Jon", "human");
   player.human === true;
   gameboardObj.placeShips(ship, 3, 4, player, gameboardObj)
   expect(gameboardObj.board[8][3]).toBeInstanceOf(Object)
@@ -116,7 +116,7 @@ test("Ship recieves attack", () => {
 
   const gameboardObj = new Gameboard(10, 10);
   const ship = new Ship(5, "vertical");
-  const player = new Player("Jon");
+  const player = new Player("Jon", "human");
   player.human === true;
   gameboardObj.placeShips(ship, 3, 4, player, gameboardObj)
   gameboardObj.receiveAttack(3, 4)
@@ -128,21 +128,17 @@ test("Ship sinks after being hit shipLen times", () => {
 
   const gameboardObj = new Gameboard(10, 10);
   const ship = new Ship(5, "vertical");
-  const player = new Player("Jon");
+  const player = new Player("Jon", "human");
   player.human === true;
   gameboardObj.placeShips(ship, 3, 4, player, gameboardObj)
   gameboardObj.receiveAttack(3, 4)
-
-  gameboardObj.receiveAttack(4, 4)
-
-  gameboardObj.receiveAttack(5, 4)
-
-  gameboardObj.receiveAttack(6, 4)
-
-  gameboardObj.receiveAttack(7, 4)
-
+  gameboardObj.receiveAttack(3, 5)
+  gameboardObj.receiveAttack(3, 6)
+  gameboardObj.receiveAttack(3, 7)
+  gameboardObj.receiveAttack(3, 8)
   expect(ship.isSunk()).toBe(true);
 });
+
 
 
 // Player Class related testing:

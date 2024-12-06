@@ -6,9 +6,7 @@ export class Ship {
     this.sunk = sunk;
   }
   hit() {
-
     this.numberOfHits++;
-    console.log("Number of hits:", this.numberOfHits);
     this.isSunk();
   }
   isSunk() {
@@ -42,7 +40,6 @@ export class Gameboard {
         board[xElement].push(0);
       });
     });
-    // console.log(board)
     return board;
   }
 
@@ -50,7 +47,7 @@ export class Gameboard {
     if (ship.direction === "horizontal") {
       if (coordinateX - 1 + ship.shipLen < this.axisX) {
         for (let i = coordinateX; i < (coordinateX + ship.shipLen); i++) {
-          if (player.playerType === true) {
+          if (player.playerType === "human") {
             board.board[coordinateY][i] = ship;
           } 
         }
@@ -58,7 +55,7 @@ export class Gameboard {
     } else if (ship.direction === "vertical") {
       if (coordinateY - 1 + ship.shipLen < this.axisY) {
         for (let i = coordinateY; i < (coordinateY + ship.shipLen); i++) {
-          if (player.playerType === true) {
+          if (player.playerType === "human") {
             board.board[i][coordinateX] = ship;
           }
         }
@@ -71,13 +68,15 @@ export class Gameboard {
     if(typeof(this.board[y][x]) === "object"){
       this.board[y][x].hit(); // this.board[y][x] is the same as ship
     }
+    else this.board[y][x] = 1
     return true
   }
 }
 
 export class Player {
-  constructor(playerName, playerType = true) {
+  constructor(playerName, playerType, playerGameboard = new Gameboard()) {
     this.playerName = playerName;
-    this.playerType = playerType
+    this.playerType = playerType;
+    this.payerGameboard = playerGameboard
   }
 }
