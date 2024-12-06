@@ -6,7 +6,10 @@ export class Ship {
     this.sunk = sunk;
   }
   hit() {
+
     this.numberOfHits++;
+    console.log("Number of hits:", this.numberOfHits);
+    this.isSunk();
   }
   isSunk() {
     if (this.numberOfHits === this.shipLen) {
@@ -45,26 +48,31 @@ export class Gameboard {
 
   placeShips(ship, coordinateX, coordinateY, player, board) {
     if (ship.direction === "horizontal") {
-      if (!(coordinateX + ship.shipLen > this.axisX)) {
+      if (coordinateX - 1 + ship.shipLen < this.axisX) {
         for (let i = coordinateX; i < (coordinateX + ship.shipLen); i++) {
           if (player.playerType === true) {
-            board.board[coordinateY][i] = 1;
-          } else board.board[coordinateY][i] = 2;
+            board.board[coordinateY][i] = ship;
+          } 
         }
       } else return "Error placement out of bounds";
     } else if (ship.direction === "vertical") {
-      if (!(coordinateY + ship.shipLen > this.axisY)) {
+      if (coordinateY - 1 + ship.shipLen < this.axisY) {
         for (let i = coordinateY; i < (coordinateY + ship.shipLen); i++) {
           if (player.playerType === true) {
-            board.board[i][coordinateX] = 1;
-          } else board.board[i][coordinateX] = 2;
+            board.board[i][coordinateX] = ship;
+          }
         }
       } else return "Error placement out of bounds";
     }
     return board
   }
 
-  receiveAttack(coordinates) {}
+  receiveAttack(x, y) {
+    if(typeof(this.board[y][x]) === "object"){
+      this.board[y][x].hit(); // this.board[y][x] is the same as ship
+    }
+    return true
+  }
 }
 
 export class Player {
