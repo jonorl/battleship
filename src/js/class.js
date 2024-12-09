@@ -124,9 +124,12 @@ export class Gameboard {
   //whether or not the attack hit a ship and then sends the ‘hit’ function to the correct ship, or
   //records the coordinates of the missed shot.
   receiveAttack(x, y) {
-    if (typeof this.board[y][x] === "object") {
+    if(this.board[y][x] === 0){
+      this.board[y][x] = 1;
+      return "water";}
+    else if (typeof this.board[y][x] === "object") {
       this.board[y][x].hit(); // this.board[y][x] is the same as ship
-    } else this.board[y][x] = 1; // 0 for not yet hit, 1 for hit water
+    } 
     if (this.checkGameOver() === "Game Over") {
       return "Game Over";
     } else return true;

@@ -88,11 +88,9 @@ export function startNewGame() {
         renderShips(x, y, player2, ship);
         placed = true;
       }
-
     }
   });
   console.log(player1.playerGameboard.board);
-
 }
 
 function renderShips(x, y, player, ship) {
@@ -107,18 +105,17 @@ function renderShips(x, y, player, ship) {
         shipDiv.style.borderRight = "dashed white 3px";
         shipDiv.style.borderTop = "none";
         shipDiv.style.borderBottom = "none";
-        if(i === 0){
-            shipDiv.style.borderTop = "dashed white 3px";
-            shipDiv.style.borderRadius = "25px 25px 0 0";
-        }
-        else if(i === ship.shipLen - 1){
-            shipDiv.style.borderBottom = "dashed white 3px";
-            shipDiv.style.borderRadius = "0 0 25px 25px";
+        if (i === 0) {
+          shipDiv.style.borderTop = "dashed white 3px";
+          shipDiv.style.borderRadius = "25px 25px 0 0";
+        } else if (i === ship.shipLen - 1) {
+          shipDiv.style.borderBottom = "dashed white 3px";
+          shipDiv.style.borderRadius = "0 0 25px 25px";
         }
       }
     } else {
       for (let i = 0; i < ship.shipLen; i++) {
-        let shipDiv = document.querySelector(
+        const shipDiv = document.querySelector(
           `.battleship-grid-player-one div[data-x="${x + i}"][data-y="${y}"]`
         );
         shipDiv.style.background = "red";
@@ -126,32 +123,31 @@ function renderShips(x, y, player, ship) {
         shipDiv.style.borderRight = "none";
         shipDiv.style.borderTop = "dashed white 3px";
         shipDiv.style.borderBottom = "dashed white 3px";
-        if(i === 0){
-            shipDiv.style.borderLeft = "dashed white 3px";
-            shipDiv.style.borderRadius = "25px 0 0 25px";
+        if (i === 0) {
+          shipDiv.style.borderLeft = "dashed white 3px";
+          shipDiv.style.borderRadius = "25px 0 0 25px";
+        } else if (i === ship.shipLen - 1) {
+          shipDiv.style.borderRight = "dashed white 3px";
+          shipDiv.style.borderRadius = "0 25px 25px 0";
         }
-        else if(i === ship.shipLen - 1){
-            shipDiv.style.borderRight = "dashed white 3px";
-            shipDiv.style.borderRadius = "0 25px 25px 0";
-        }
-
       }
     }
-  } else { // need to get rid of rendering the computer's side once everything is tested
+  } else {
+    // need to get rid of rendering the computer's side once everything is tested
     if (ship.direction === "vertical") {
       for (let i = 0; i < ship.shipLen; i++) {
         const shipDiv = document.querySelector(
           `.battleship-grid-player-two div[data-x="${x}"][data-y="${y + i}"]`
         );
-        shipDiv.style.background = "red";
+        // shipDiv.style.background = "red";
         shipDiv.style.border = "dashed white 3px";
       }
     } else {
       for (let i = 0; i < ship.shipLen; i++) {
-        let shipDiv = document.querySelector(
+        const shipDiv = document.querySelector(
           `.battleship-grid-player-two div[data-x="${x + i}"][data-y="${y}"]`
         );
-        shipDiv.style.background = "red";
+        // shipDiv.style.background = "red";
         shipDiv.style.border = "dashed white 3px";
       }
     }
@@ -159,13 +155,28 @@ function renderShips(x, y, player, ship) {
 }
 
 let opponentBoard = document.querySelector(".battleship-grid-player-two");
-opponentBoard.addEventListener('click', (event) => {
-    const target = event.target;
-    let x;
-    let y;
-    x = target.attributes[0].nodeValue;
-    y = target.attributes[1].nodeValue;
-    player2.playerGameboard.receiveAttack(x,y)
-    console.log(x, y)
-    console.log(player2.playerGameboard.board);
-})
+opponentBoard.addEventListener("click", (event) => {
+  const target = event.target;
+  let x;
+  let y;
+  x = target.attributes[0].nodeValue;
+  y = target.attributes[1].nodeValue;
+  renderOpponentBoard(x, y);
+//   console.log(x, y);
+//   console.log(player2.playerGameboard.board);
+});
+
+function renderOpponentBoard(x, y) {
+  const shipDiv = document.querySelector(
+    `.battleship-grid-player-two div[data-x="${x}"][data-y="${y}"]`
+  );
+  let receiveAttackResult = player2.playerGameboard.receiveAttack(x, y)
+  console.log(receiveAttackResult)
+  if (receiveAttackResult === "water") {
+    player2.playerGameboard.receiveAttack(x, y);
+    shipDiv.style.background = "blue";
+  } else if (receiveAttackResult === true){
+    player2.playerGameboard.receiveAttack(x, y);
+    shipDiv.style.background = "red";
+  }
+}
