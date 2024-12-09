@@ -92,7 +92,7 @@ export function startNewGame() {
     }
   });
   console.log(player1.playerGameboard.board);
-  console.log(player2.playerGameboard.board);
+
 }
 
 function renderShips(x, y, player, ship) {
@@ -157,3 +157,15 @@ function renderShips(x, y, player, ship) {
     }
   }
 }
+
+let opponentBoard = document.querySelector(".battleship-grid-player-two");
+opponentBoard.addEventListener('click', (event) => {
+    const target = event.target;
+    let x;
+    let y;
+    x = target.attributes[0].nodeValue;
+    y = target.attributes[1].nodeValue;
+    player2.playerGameboard.receiveAttack(x,y)
+    console.log(x, y)
+    console.log(player2.playerGameboard.board);
+})
