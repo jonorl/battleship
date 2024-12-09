@@ -2,7 +2,7 @@
 
 import "../css/style.css";
 import "./class.js";
-import "./DOMFunctions.js";
+import { startNewGame} from "./DOMFunctions.js";
 
-
+startNewGame();
  
