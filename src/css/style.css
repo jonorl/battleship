@@ -7,22 +7,29 @@
   font-family: "Roboto";
 }
 
-.menuButtonImage {
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
+.main-container {
+  display: grid;
+  grid-template-rows: 1fr 10fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
 }
 
-.menuButtonSubtree {
-  margin-left: 6vh;
-  display: none;
-  position: absolute;
-  min-width: 160px;
-  overflow: auto;
-  z-index: 1;
+.new-game {
+  grid-column: span 2;
+  padding: 1vh;
 }
 
-.visible {
-  display: block;
+.play-instructions {
+  grid-column: span 2;
+}
+
+.battleship-grid-player-one, .battleship-grid-player-two {
+  display: grid;
+  grid-template-rows: repeat(10, 50px);
+  grid-template-columns: repeat(10, 50px);
+
+}
+
+.battleship-grid-player-one > div, .battleship-grid-player-two > div  {
+  border: 1px aliceblue solid;
 }
