@@ -63,13 +63,13 @@ export function startNewGame() {
 
       if (
         player1.playerGameboard.placeShips(ship, x, y, player1) !==
-          "overlapping ships are not allowed" ||
+          "overlapping ships are not allowed" &&
         player1.playerGameboard.placeShips(ship, x, y, player1) !==
           "Error placement out of bounds"
       ) {
+        renderShips(x, y, player1, ship);
         placed = true;
       }
-      renderShips(x, y, player1);
     }
   });
   shipsArray2.forEach((ship) => {
@@ -81,38 +81,56 @@ export function startNewGame() {
 
       if (
         player2.playerGameboard.placeShips(ship, x, y, player2) !==
-          "overlapping ships are not allowed" ||
+          "overlapping ships are not allowed" &&
         player2.playerGameboard.placeShips(ship, x, y, player2) !==
           "Error placement out of bounds"
       ) {
-
+        renderShips(x, y, player2, ship);
         placed = true;
-        // renderShips(x, y, player2);
       }
-      renderShips(x, y, player2);
+
     }
   });
   console.log(player1.playerGameboard.board);
   console.log(player2.playerGameboard.board);
 }
 
-function renderShips(x, y, player) {
-    console.log(x)
-    console.log(y)
-    console.log(player.playerName)
+function renderShips(x, y, player, ship) {
   if (player.playerName === "Player 1") {
-    let shipDiv = document.querySelector(
-      `.battleship-grid-player-one div[data-x="${x}"][data-y="${y}"]`
-    );
-    console.log(shipDiv);
-    shipDiv.style.background = "red";
-    shipDiv.style.border = "solid white 3px";
-  }
-  else {
-    const shipDiv = document.querySelector(
-        `.battleship-grid-player-two div[data-x='${x}'][data-y='${y}']`
-      );
-      shipDiv.style.background = "red";
-      shipDiv.style.border = "solid white 3px";
+    if (ship.direction === "vertical") {
+      for (let i = 0; i < ship.shipLen; i++) {
+        const shipDiv = document.querySelector(
+          `.battleship-grid-player-one div[data-x="${x}"][data-y="${y + i}"]`
+        );
+        shipDiv.style.background = "red";
+        shipDiv.style.border = "solid white 3px";
+      }
+    } else {
+      for (let i = 0; i < ship.shipLen; i++) {
+        let shipDiv = document.querySelector(
+          `.battleship-grid-player-one div[data-x="${x + i}"][data-y="${y}"]`
+        );
+        shipDiv.style.background = "red";
+        shipDiv.style.border = "solid white 3px";
+      }
+    }
+  } else { // need to get rid of rendering the computer's side once everything is tested
+    if (ship.direction === "vertical") {
+      for (let i = 0; i < ship.shipLen; i++) {
+        const shipDiv = document.querySelector(
+          `.battleship-grid-player-two div[data-x="${x}"][data-y="${y + i}"]`
+        );
+        shipDiv.style.background = "red";
+        shipDiv.style.border = "solid white 3px";
+      }
+    } else {
+      for (let i = 0; i < ship.shipLen; i++) {
+        let shipDiv = document.querySelector(
+          `.battleship-grid-player-two div[data-x="${x + i}"][data-y="${y}"]`
+        );
+        shipDiv.style.background = "red";
+        shipDiv.style.border = "solid white 3px";
+      }
+    }
   }
 }
