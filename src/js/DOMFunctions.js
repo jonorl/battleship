@@ -103,7 +103,18 @@ function renderShips(x, y, player, ship) {
           `.battleship-grid-player-one div[data-x="${x}"][data-y="${y + i}"]`
         );
         shipDiv.style.background = "red";
-        shipDiv.style.border = "solid white 3px";
+        shipDiv.style.borderLeft = "dashed white 3px";
+        shipDiv.style.borderRight = "dashed white 3px";
+        shipDiv.style.borderTop = "none";
+        shipDiv.style.borderBottom = "none";
+        if(i === 0){
+            shipDiv.style.borderTop = "dashed white 3px";
+            shipDiv.style.borderRadius = "25px 25px 0 0";
+        }
+        else if(i === ship.shipLen - 1){
+            shipDiv.style.borderBottom = "dashed white 3px";
+            shipDiv.style.borderRadius = "0 0 25px 25px";
+        }
       }
     } else {
       for (let i = 0; i < ship.shipLen; i++) {
@@ -111,7 +122,19 @@ function renderShips(x, y, player, ship) {
           `.battleship-grid-player-one div[data-x="${x + i}"][data-y="${y}"]`
         );
         shipDiv.style.background = "red";
-        shipDiv.style.border = "solid white 3px";
+        shipDiv.style.borderLeft = "none";
+        shipDiv.style.borderRight = "none";
+        shipDiv.style.borderTop = "dashed white 3px";
+        shipDiv.style.borderBottom = "dashed white 3px";
+        if(i === 0){
+            shipDiv.style.borderLeft = "dashed white 3px";
+            shipDiv.style.borderRadius = "25px 0 0 25px";
+        }
+        else if(i === ship.shipLen - 1){
+            shipDiv.style.borderRight = "dashed white 3px";
+            shipDiv.style.borderRadius = "0 25px 25px 0";
+        }
+
       }
     }
   } else { // need to get rid of rendering the computer's side once everything is tested
@@ -121,7 +144,7 @@ function renderShips(x, y, player, ship) {
           `.battleship-grid-player-two div[data-x="${x}"][data-y="${y + i}"]`
         );
         shipDiv.style.background = "red";
-        shipDiv.style.border = "solid white 3px";
+        shipDiv.style.border = "dashed white 3px";
       }
     } else {
       for (let i = 0; i < ship.shipLen; i++) {
@@ -129,7 +152,7 @@ function renderShips(x, y, player, ship) {
           `.battleship-grid-player-two div[data-x="${x + i}"][data-y="${y}"]`
         );
         shipDiv.style.background = "red";
-        shipDiv.style.border = "solid white 3px";
+        shipDiv.style.border = "dashed white 3px";
       }
     }
   }
