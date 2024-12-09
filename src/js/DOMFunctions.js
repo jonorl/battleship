@@ -90,7 +90,6 @@ export function startNewGame() {
       }
     }
   });
-  console.log(player1.playerGameboard.board);
 }
 
 function renderShips(x, y, player, ship) {
@@ -139,7 +138,6 @@ function renderShips(x, y, player, ship) {
         const shipDiv = document.querySelector(
           `.battleship-grid-player-two div[data-x="${x}"][data-y="${y + i}"]`
         );
-        // shipDiv.style.background = "red";
         shipDiv.style.border = "dashed white 3px";
       }
     } else {
@@ -147,7 +145,6 @@ function renderShips(x, y, player, ship) {
         const shipDiv = document.querySelector(
           `.battleship-grid-player-two div[data-x="${x + i}"][data-y="${y}"]`
         );
-        // shipDiv.style.background = "red";
         shipDiv.style.border = "dashed white 3px";
       }
     }
@@ -162,8 +159,6 @@ opponentBoard.addEventListener("click", (event) => {
   x = target.attributes[0].nodeValue;
   y = target.attributes[1].nodeValue;
   renderOpponentBoard(x, y);
-//   console.log(x, y);
-//   console.log(player2.playerGameboard.board);
 });
 
 function renderOpponentBoard(x, y) {
@@ -172,11 +167,10 @@ function renderOpponentBoard(x, y) {
   );
   let receiveAttackResult = player2.playerGameboard.receiveAttack(x, y)
   console.log(receiveAttackResult)
+  console.log(player2.playerGameboard.board);
   if (receiveAttackResult === "water") {
-    player2.playerGameboard.receiveAttack(x, y);
     shipDiv.style.background = "blue";
   } else if (receiveAttackResult === true){
-    player2.playerGameboard.receiveAttack(x, y);
     shipDiv.style.background = "red";
   }
 }
