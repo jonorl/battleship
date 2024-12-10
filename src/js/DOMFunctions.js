@@ -178,10 +178,6 @@ function renderOpponentBoard(x, y) {
 }
 
 function opponentTurn() {
-  console.log("adj ", adj);
-  console.log(lastHitCPU);
-  console.log(player1.playerGameboard.board);
-
   if (adj === true && lastHitCPU !== 0) {
     let x = lastHitCPU[0];
     let y = lastHitCPU[1];
