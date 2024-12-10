@@ -9,18 +9,26 @@
 
 .main-container {
   display: grid;
-  grid-template-rows: 1fr 10fr 1fr;
+  grid-template-rows: 0.1fr 1fr;
   grid-template-columns: 1fr 1fr;
   justify-items: center;
+  align-content: center;
+  height: max-content;
 }
 
 .new-game {
   grid-column: span 2;
   padding: 1vh;
   margin-top: 3vh;
+  margin-bottom: 3vh;
+  border-radius: 25px;
+  border: solid aliceblue 3px;
 }
 
 .play-instructions {
+  display: flex;
+  justify-content: center;
+  align-content: flex-start;
   grid-column: span 2;
   margin-top: 3vh;
 }
@@ -29,7 +37,9 @@
   display: grid;
   grid-template-rows: repeat(11, 50px);
   grid-template-columns: repeat(10, 50px);
-
+  margin-bottom: 0;
+  padding-bottom: 0;
+  height:max-content;
 }
 
 .battleship-grid-player-one > div, .battleship-grid-player-two > div  {
