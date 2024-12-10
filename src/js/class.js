@@ -132,7 +132,6 @@ export class Gameboard {
       this.board[y][x] = 1;
     } 
     else if (this.board[y][x] === 1){
-      console.log(this.board)
       return "tile already hit"
     }
     if (this.checkGameOver() === "Game Over") {

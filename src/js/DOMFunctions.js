@@ -183,12 +183,14 @@ function opponentTurn() {
   let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
   if (receiveAttackResult === "water") {
     shipDiv.style.background = "blue";
+    playInstructions.textContent = "Player's turn";
   } else if (receiveAttackResult === true) {
     shipDiv.className = "fa fa-close";
     shipDiv.style.display = "flex";
     shipDiv.style.justifyContent = "center";
     shipDiv.style.alignItems = "center";
     shipDiv.style.fontSize = "50px";
+    playInstructions.textContent = "Player's turn";
   } else if (receiveAttackResult === "tile already hit") {
     opponentTurn();
   } else if (receiveAttackResult === "Game Over") {
@@ -198,9 +200,9 @@ function opponentTurn() {
     shipDiv.style.alignItems = "center";
     shipDiv.style.fontSize = "50px";
     playInstructions.textContent = "Game Over, you lose!";
+    console.log("Game Over, you lose!");
     return;
-  }
-  playInstructions.textContent = "Player's turn";
+  } else playInstructions.textContent = "Player's turn";
 }
 
 function resetBoards() {
@@ -237,7 +239,8 @@ opponentBoard.addEventListener("click", (event) => {
   renderOpponentBoard(x, y);
 });
 
-btn.addEventListener("click", function() {
+btn.addEventListener("click", function () {
   resetBoards();
   startNewGame();
+  playInstructions.textContent = "Player's turn";
 });
