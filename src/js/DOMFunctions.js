@@ -7,6 +7,7 @@ import { Ship, Gameboard, Player } from "./class";
 const btn = document.querySelector("button");
 const player1 = new Player("Player 1", "human");
 const player2 = new Player("Computer", "cpu");
+const playInstructions = document.querySelector(".play-instructions")
 
 export function startNewGame() {
   // Create ships
@@ -172,6 +173,11 @@ function renderOpponentBoard(x, y) {
   } else if (receiveAttackResult === true){
     shipDiv.style.background = "red";
   } else if (receiveAttackResult === "tile already hit"){
+    playInstructions.textContent = "Tile already hit"
+    return
+  } else if(receiveAttackResult === "Game Over"){
+    shipDiv.style.background = "red";
+    playInstructions.textContent = "Game Over, you win!"
     return
   }
   opponentTurn()
@@ -195,5 +201,14 @@ function opponentTurn(){
     shipDiv.style.fontSize = "50px"
   } else if (receiveAttackResult === "tile already hit"){
     opponentTurn()
+  } else if(receiveAttackResult === "Game Over") {
+    shipDiv.className = "fa fa-close"
+    shipDiv.style.display = "flex"
+    shipDiv.style.justifyContent = "center"
+    shipDiv.style.alignItems = "center"
+    shipDiv.style.fontSize = "50px"
+    playInstructions.textContent = "Game Over, you lose!"
+    return
   }
+  playInstructions.textContent = "Player's turn"
 }
