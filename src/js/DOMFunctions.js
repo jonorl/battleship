@@ -131,8 +131,9 @@ function renderShips(x, y, player, ship) {
         }
       }
     }
-  } else {
-    // need to get rid of rendering the computer's side once everything is tested
+  } // need to get rid of rendering the computer's side once everything is tested 
+  else {
+    
     if (ship.direction === "vertical") {
       for (let i = 0; i < ship.shipLen; i++) {
         const shipDiv = document.querySelector(
@@ -166,11 +167,33 @@ function renderOpponentBoard(x, y) {
     `.battleship-grid-player-two div[data-x="${x}"][data-y="${y}"]`
   );
   let receiveAttackResult = player2.playerGameboard.receiveAttack(x, y)
-  console.log(receiveAttackResult)
-  console.log(player2.playerGameboard.board);
   if (receiveAttackResult === "water") {
     shipDiv.style.background = "blue";
   } else if (receiveAttackResult === true){
     shipDiv.style.background = "red";
+  } else if (receiveAttackResult === "tile already hit"){
+    return
+  }
+  opponentTurn()
+}
+
+function opponentTurn(){
+  let adj = false;
+  const x = Math.floor(Math.random() * 10);
+  const y = Math.floor(Math.random() * 10);
+  const shipDiv = document.querySelector(
+    `.battleship-grid-player-one div[data-x="${x}"][data-y="${y}"]`
+  );
+  let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y)
+  if (receiveAttackResult === "water"){
+    shipDiv.style.background = "blue";
+  } else if (receiveAttackResult === true){
+    shipDiv.className = "fa fa-close"
+    shipDiv.style.display = "flex"
+    shipDiv.style.justifyContent = "center"
+    shipDiv.style.alignItems = "center"
+    shipDiv.style.fontSize = "50px"
+  } else if (receiveAttackResult === "tile already hit"){
+    opponentTurn()
   }
 }

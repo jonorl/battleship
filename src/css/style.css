@@ -34,3 +34,19 @@
 .battleship-grid-player-one > div, .battleship-grid-player-two > div  {
   border: 1px aliceblue solid;
 }
+
+.crossed {
+  border: 
+      linear-gradient(to top left,
+          rgba(0,0,0,0) 0%,
+          rgba(0,0,0,0) calc(50% - 0.8px),
+          rgba(0,0,0,1) 50%,
+          rgba(0,0,0,0) calc(50% + 0.8px),
+          rgba(0,0,0,0) 100%),
+      linear-gradient(to top right,
+          rgba(0,0,0,0) 0%,
+          rgba(0,0,0,0) calc(50% - 0.8px),
+          rgba(0,0,0,1) 50%,
+          rgba(0,0,0,0) calc(50% + 0.8px),
+          rgba(0,0,0,0) 100%);
+}

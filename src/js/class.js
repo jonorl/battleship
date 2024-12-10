@@ -129,7 +129,12 @@ export class Gameboard {
       return "water";}
     else if (typeof this.board[y][x] === "object") {
       this.board[y][x].hit(); // this.board[y][x] is the same as ship
+      this.board[y][x] = 1;
     } 
+    else if (this.board[y][x] === 1){
+      console.log(this.board)
+      return "tile already hit"
+    }
     if (this.checkGameOver() === "Game Over") {
       return "Game Over";
     } else return true;
