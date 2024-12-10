@@ -1,13 +1,14 @@
 //Imports
 
-import { Ship, Gameboard, Player } from "./class";
+import { Ship, Player } from "./class";
 
 // variables
 
 const btn = document.querySelector("button");
-const player1 = new Player("Player 1", "human");
-const player2 = new Player("Computer", "cpu");
-const playInstructions = document.querySelector(".play-instructions")
+let player1 = new Player("Player 1", "human");
+let player2 = new Player("Computer", "cpu");
+const playInstructions = document.querySelector(".play-instructions");
+const opponentBoard = document.querySelector(".battleship-grid-player-two");
 
 export function startNewGame() {
   // Create ships
@@ -132,9 +133,8 @@ function renderShips(x, y, player, ship) {
         }
       }
     }
-  } // need to get rid of rendering the computer's side once everything is tested 
+  } // need to get rid of rendering the computer's side once everything is tested
   else {
-    
     if (ship.direction === "vertical") {
       for (let i = 0; i < ship.shipLen; i++) {
         const shipDiv = document.querySelector(
@@ -153,62 +153,91 @@ function renderShips(x, y, player, ship) {
   }
 }
 
-let opponentBoard = document.querySelector(".battleship-grid-player-two");
-opponentBoard.addEventListener("click", (event) => {
-  const target = event.target;
-  let x;
-  let y;
-  x = target.attributes[0].nodeValue;
-  y = target.attributes[1].nodeValue;
-  renderOpponentBoard(x, y);
-});
-
 function renderOpponentBoard(x, y) {
   const shipDiv = document.querySelector(
     `.battleship-grid-player-two div[data-x="${x}"][data-y="${y}"]`
   );
-  let receiveAttackResult = player2.playerGameboard.receiveAttack(x, y)
+  let receiveAttackResult = player2.playerGameboard.receiveAttack(x, y);
   if (receiveAttackResult === "water") {
     shipDiv.style.background = "blue";
-  } else if (receiveAttackResult === true){
+  } else if (receiveAttackResult === true) {
     shipDiv.style.background = "red";
-  } else if (receiveAttackResult === "tile already hit"){
-    playInstructions.textContent = "Tile already hit"
-    return
-  } else if(receiveAttackResult === "Game Over"){
+  } else if (receiveAttackResult === "tile already hit") {
+    playInstructions.textContent = "Tile already hit";
+    return;
+  } else if (receiveAttackResult === "Game Over") {
     shipDiv.style.background = "red";
-    playInstructions.textContent = "Game Over, you win!"
-    return
+    playInstructions.textContent = "Game Over, you win!";
+    return;
   }
-  opponentTurn()
+  opponentTurn();
 }
 
-function opponentTurn(){
+function opponentTurn() {
   let adj = false;
   const x = Math.floor(Math.random() * 10);
   const y = Math.floor(Math.random() * 10);
   const shipDiv = document.querySelector(
     `.battleship-grid-player-one div[data-x="${x}"][data-y="${y}"]`
   );
-  let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y)
-  if (receiveAttackResult === "water"){
+  let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
+  if (receiveAttackResult === "water") {
     shipDiv.style.background = "blue";
-  } else if (receiveAttackResult === true){
-    shipDiv.className = "fa fa-close"
-    shipDiv.style.display = "flex"
-    shipDiv.style.justifyContent = "center"
-    shipDiv.style.alignItems = "center"
-    shipDiv.style.fontSize = "50px"
-  } else if (receiveAttackResult === "tile already hit"){
-    opponentTurn()
-  } else if(receiveAttackResult === "Game Over") {
-    shipDiv.className = "fa fa-close"
-    shipDiv.style.display = "flex"
-    shipDiv.style.justifyContent = "center"
-    shipDiv.style.alignItems = "center"
-    shipDiv.style.fontSize = "50px"
-    playInstructions.textContent = "Game Over, you lose!"
-    return
+  } else if (receiveAttackResult === true) {
+    shipDiv.className = "fa fa-close";
+    shipDiv.style.display = "flex";
+    shipDiv.style.justifyContent = "center";
+    shipDiv.style.alignItems = "center";
+    shipDiv.style.fontSize = "50px";
+  } else if (receiveAttackResult === "tile already hit") {
+    opponentTurn();
+  } else if (receiveAttackResult === "Game Over") {
+    shipDiv.className = "fa fa-close";
+    shipDiv.style.display = "flex";
+    shipDiv.style.justifyContent = "center";
+    shipDiv.style.alignItems = "center";
+    shipDiv.style.fontSize = "50px";
+    playInstructions.textContent = "Game Over, you lose!";
+    return;
   }
-  playInstructions.textContent = "Player's turn"
+  playInstructions.textContent = "Player's turn";
 }
+
+function resetBoards() {
+  for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+      let shipDiv = document.querySelector(
+        `.battleship-grid-player-one div[data-x="${i}"][data-y="${j}"]`
+      );
+      shipDiv.style.background = "black";
+      shipDiv.style.border = "1px aliceblue solid";
+      shipDiv.className = "";
+      shipDiv.style.borderRadius = "";
+      shipDiv = 0;
+      player1 = new Player("Player 1", "human");
+      shipDiv = document.querySelector(
+        `.battleship-grid-player-two div[data-x="${i}"][data-y="${j}"]`
+      );
+      shipDiv.style.background = "black";
+      shipDiv.style.border = "1px aliceblue solid";
+      shipDiv.className = "";
+      shipDiv.style.borderRadius = "";
+      shipDiv = 0;
+      player2 = new Player("Computer", "cpu");
+    }
+  }
+}
+
+// Event Listeners
+
+opponentBoard.addEventListener("click", (event) => {
+  const target = event.target;
+  const x = target.attributes[0].nodeValue;
+  const y = target.attributes[1].nodeValue;
+  renderOpponentBoard(x, y);
+});
+
+btn.addEventListener("click", function() {
+  resetBoards();
+  startNewGame();
+});
