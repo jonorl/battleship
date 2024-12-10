@@ -9,6 +9,12 @@ let player1 = new Player("Player 1", "human");
 let player2 = new Player("Computer", "cpu");
 const playInstructions = document.querySelector(".play-instructions");
 const opponentBoard = document.querySelector(".battleship-grid-player-two");
+let lastHitCPU = [];
+let adj = false;
+let xMinusOne = false;
+let xPlusOne = false;
+let yMinusOne = false;
+let yPlusOne = false;
 
 export function startNewGame() {
   // Create ships
@@ -174,17 +180,93 @@ function renderOpponentBoard(x, y) {
 }
 
 function opponentTurn() {
-  let adj = false;
-  const x = Math.floor(Math.random() * 10);
-  const y = Math.floor(Math.random() * 10);
-  const shipDiv = document.querySelector(
+  let x = Math.floor(Math.random() * 10);
+  let y = Math.floor(Math.random() * 10);
+  let shipDiv = document.querySelector(
     `.battleship-grid-player-one div[data-x="${x}"][data-y="${y}"]`
   );
+  if (adj === true) {
+    x = lastHitCPU[0];
+    y = lastHitCPU[1];
+    console.log(x, y);
+    console.log("adj ", adj);
+    console.log(lastHitCPU);
+    if (!(x - 1 < 0) && xMinusOne === false) {
+      x = x - 1;
+      let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
+      resultAttackNextMove(
+        receiveAttackResult,
+        document.querySelector(
+          `.battleship-grid-player-one div[data-x="${x}"][data-y="${y}"]`
+        ),
+        x,
+        y
+      );
+      xMinusOne = true;
+      return;
+    } else if (!(x + 1 > 9) && xPlusOne === false) {
+      x = x + 1;
+      let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
+      resultAttackNextMove(
+        receiveAttackResult,
+        document.querySelector(
+          `.battleship-grid-player-one div[data-x="${x}"][data-y="${y}"]`
+        ),
+        x,
+        y
+      );
+      xPlusOne = true;
+      return;
+    } else if (!(y - 1 < 0) && yMinusOne === false) {
+      y = y - 1;
+      let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
+      resultAttackNextMove(
+        receiveAttackResult,
+        document.querySelector(
+          `.battleship-grid-player-one div[data-x="${x}"][data-y="${y}"]`
+        ),
+        x,
+        y
+      );
+      yMinusOne = true;
+      return;
+    } else if (!(y + 1 > 9) && yPlusOne === false) {
+      y = y + 1;
+      let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
+      resultAttackNextMove(
+        receiveAttackResult,
+        document.querySelector(
+          `.battleship-grid-player-one div[data-x="${x}"][data-y="${y}"]`
+        ),
+        x,
+        y
+      );
+      yPlusOne = true;
+      return;
+    } else {
+      console.log(lastHitCPU);
+      if (lastHitCPU.length === 0) {
+        adj = false;
+      }
+      else lastHitCPU = lastHitCPU.slice(2);
+      xMinusOne = false;
+      xPlusOne = false;
+      yMinusOne = false;
+      yPlusOne = false;
+    }
+  }
   let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
+
+  resultAttackNextMove(receiveAttackResult, shipDiv, x, y);
+}
+
+function resultAttackNextMove(receiveAttackResult, shipDiv, x, y) {
   if (receiveAttackResult === "water") {
     shipDiv.style.background = "blue";
     playInstructions.textContent = "Player's turn";
   } else if (receiveAttackResult === true) {
+    adj = true;
+    lastHitCPU.push(x, y);
     shipDiv.className = "fa fa-close";
     shipDiv.style.display = "flex";
     shipDiv.style.justifyContent = "center";
@@ -200,7 +282,6 @@ function opponentTurn() {
     shipDiv.style.alignItems = "center";
     shipDiv.style.fontSize = "50px";
     playInstructions.textContent = "Game Over, you lose!";
-    console.log("Game Over, you lose!");
     return;
   } else playInstructions.textContent = "Player's turn";
 }
