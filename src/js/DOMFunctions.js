@@ -11,10 +11,6 @@ const playInstructions = document.querySelector(".play-instructions");
 const opponentBoard = document.querySelector(".battleship-grid-player-two");
 let lastHitCPU = [];
 let adj = false;
-let xMinusOne = false;
-let xPlusOne = false;
-let yMinusOne = false;
-let yPlusOne = false;
 
 export function startNewGame() {
   // Create ships
@@ -180,18 +176,16 @@ function renderOpponentBoard(x, y) {
 }
 
 function opponentTurn() {
-  let x = Math.floor(Math.random() * 10);
-  let y = Math.floor(Math.random() * 10);
-  let shipDiv = document.querySelector(
-    `.battleship-grid-player-one div[data-x="${x}"][data-y="${y}"]`
-  );
-  if (adj === true) {
-    x = lastHitCPU[0];
-    y = lastHitCPU[1];
-    console.log(x, y);
-    console.log("adj ", adj);
-    console.log(lastHitCPU);
-    if (!(x - 1 < 0) && xMinusOne === false) {
+
+  console.log("adj ", adj);
+  console.log(lastHitCPU);
+  console.log(player1.playerGameboard.board)
+
+  if (adj === true && lastHitCPU !== 0) {
+    let x = lastHitCPU[0];
+    let y = lastHitCPU[1];
+
+    if (!(x - 1 < 0) && player1.playerGameboard.board[y][(x - 1)] !== 1) {
       x = x - 1;
       let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
       resultAttackNextMove(
@@ -202,9 +196,8 @@ function opponentTurn() {
         x,
         y
       );
-      xMinusOne = true;
       return;
-    } else if (!(x + 1 > 9) && xPlusOne === false) {
+    } else if (!(x + 1 > 9) && player1.playerGameboard.board[y][(x + 1)] !== 1) {
       x = x + 1;
       let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
       resultAttackNextMove(
@@ -215,9 +208,8 @@ function opponentTurn() {
         x,
         y
       );
-      xPlusOne = true;
       return;
-    } else if (!(y - 1 < 0) && yMinusOne === false) {
+    } else if (!(y - 1 < 0) && player1.playerGameboard.board[(y - 1)][x] !== 1) {
       y = y - 1;
       let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
       resultAttackNextMove(
@@ -228,35 +220,34 @@ function opponentTurn() {
         x,
         y
       );
-      yMinusOne = true;
       return;
-    } else if (!(y + 1 > 9) && yPlusOne === false) {
+    } else if (!(y + 1 > 9) && player1.playerGameboard.board[(y + 1)][x] !== 1) {
       y = y + 1;
       let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
       resultAttackNextMove(
         receiveAttackResult,
         document.querySelector(
           `.battleship-grid-player-one div[data-x="${x}"][data-y="${y}"]`
-        ),
-        x,
-        y
-      );
-      yPlusOne = true;
+        ), x, y);
       return;
     } else {
-      console.log(lastHitCPU);
+      lastHitCPU = lastHitCPU.slice(2);
       if (lastHitCPU.length === 0) {
         adj = false;
+      } 
+      if (lastHitCPU.length !== 0) {
+        opponentTurn();
+        return;
       }
-      else lastHitCPU = lastHitCPU.slice(2);
-      xMinusOne = false;
-      xPlusOne = false;
-      yMinusOne = false;
-      yPlusOne = false;
     }
   }
-  let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
 
+  let x = Math.floor(Math.random() * 10);
+  let y = Math.floor(Math.random() * 10);
+  let shipDiv = document.querySelector(
+    `.battleship-grid-player-one div[data-x="${x}"][data-y="${y}"]`
+  );
+  let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
   resultAttackNextMove(receiveAttackResult, shipDiv, x, y);
 }
 
