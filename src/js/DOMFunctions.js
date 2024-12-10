@@ -11,6 +11,7 @@ const playInstructions = document.querySelector(".play-instructions");
 const opponentBoard = document.querySelector(".battleship-grid-player-two");
 let lastHitCPU = [];
 let adj = false;
+let gameOver = false;
 
 export function startNewGame() {
   // Create ships
@@ -136,23 +137,23 @@ function renderShips(x, y, player, ship) {
       }
     }
   } // need to get rid of rendering the computer's side once everything is tested
-  else {
-    if (ship.direction === "vertical") {
-      for (let i = 0; i < ship.shipLen; i++) {
-        const shipDiv = document.querySelector(
-          `.battleship-grid-player-two div[data-x="${x}"][data-y="${y + i}"]`
-        );
-        shipDiv.style.border = "dashed white 3px";
-      }
-    } else {
-      for (let i = 0; i < ship.shipLen; i++) {
-        const shipDiv = document.querySelector(
-          `.battleship-grid-player-two div[data-x="${x + i}"][data-y="${y}"]`
-        );
-        shipDiv.style.border = "dashed white 3px";
-      }
-    }
-  }
+  // else {
+  //   if (ship.direction === "vertical") {
+  //     for (let i = 0; i < ship.shipLen; i++) {
+  //       const shipDiv = document.querySelector(
+  //         `.battleship-grid-player-two div[data-x="${x}"][data-y="${y + i}"]`
+  //       );
+  //       shipDiv.style.border = "dashed white 3px";
+  //     }
+  //   } else {
+  //     for (let i = 0; i < ship.shipLen; i++) {
+  //       const shipDiv = document.querySelector(
+  //         `.battleship-grid-player-two div[data-x="${x + i}"][data-y="${y}"]`
+  //       );
+  //       shipDiv.style.border = "dashed white 3px";
+  //     }
+  //   }
+  // }
 }
 
 function renderOpponentBoard(x, y) {
@@ -170,22 +171,22 @@ function renderOpponentBoard(x, y) {
   } else if (receiveAttackResult === "Game Over") {
     shipDiv.style.background = "red";
     playInstructions.textContent = "Game Over, you win!";
+    gameOver = true;
     return;
   }
   opponentTurn();
 }
 
 function opponentTurn() {
-
   console.log("adj ", adj);
   console.log(lastHitCPU);
-  console.log(player1.playerGameboard.board)
+  console.log(player1.playerGameboard.board);
 
   if (adj === true && lastHitCPU !== 0) {
     let x = lastHitCPU[0];
     let y = lastHitCPU[1];
 
-    if (!(x - 1 < 0) && player1.playerGameboard.board[y][(x - 1)] !== 1) {
+    if (!(x - 1 < 0) && player1.playerGameboard.board[y][x - 1] !== 1) {
       x = x - 1;
       let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
       resultAttackNextMove(
@@ -197,7 +198,7 @@ function opponentTurn() {
         y
       );
       return;
-    } else if (!(x + 1 > 9) && player1.playerGameboard.board[y][(x + 1)] !== 1) {
+    } else if (!(x + 1 > 9) && player1.playerGameboard.board[y][x + 1] !== 1) {
       x = x + 1;
       let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
       resultAttackNextMove(
@@ -209,7 +210,7 @@ function opponentTurn() {
         y
       );
       return;
-    } else if (!(y - 1 < 0) && player1.playerGameboard.board[(y - 1)][x] !== 1) {
+    } else if (!(y - 1 < 0) && player1.playerGameboard.board[y - 1][x] !== 1) {
       y = y - 1;
       let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
       resultAttackNextMove(
@@ -221,20 +222,23 @@ function opponentTurn() {
         y
       );
       return;
-    } else if (!(y + 1 > 9) && player1.playerGameboard.board[(y + 1)][x] !== 1) {
+    } else if (!(y + 1 > 9) && player1.playerGameboard.board[y + 1][x] !== 1) {
       y = y + 1;
       let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
       resultAttackNextMove(
         receiveAttackResult,
         document.querySelector(
           `.battleship-grid-player-one div[data-x="${x}"][data-y="${y}"]`
-        ), x, y);
+        ),
+        x,
+        y
+      );
       return;
     } else {
       lastHitCPU = lastHitCPU.slice(2);
       if (lastHitCPU.length === 0) {
         adj = false;
-      } 
+      }
       if (lastHitCPU.length !== 0) {
         opponentTurn();
         return;
@@ -273,6 +277,7 @@ function resultAttackNextMove(receiveAttackResult, shipDiv, x, y) {
     shipDiv.style.alignItems = "center";
     shipDiv.style.fontSize = "50px";
     playInstructions.textContent = "Game Over, you lose!";
+    gameOver = true;
     return;
   } else playInstructions.textContent = "Player's turn";
 }
@@ -305,14 +310,18 @@ function resetBoards() {
 // Event Listeners
 
 opponentBoard.addEventListener("click", (event) => {
-  const target = event.target;
-  const x = target.attributes[0].nodeValue;
-  const y = target.attributes[1].nodeValue;
-  renderOpponentBoard(x, y);
+  if (gameOver === false) {
+    const target = event.target;
+    const x = target.attributes[0].nodeValue;
+    const y = target.attributes[1].nodeValue;
+    renderOpponentBoard(x, y);
+  }
 });
 
 btn.addEventListener("click", function () {
   resetBoards();
   startNewGame();
-  playInstructions.textContent = "Player's turn";
+  gameOver = false;
+  playInstructions.textContent =
+    "To start the game click anywhere on the opponent board.";
 });
