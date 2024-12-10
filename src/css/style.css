@@ -34,20 +34,23 @@
   margin-top: 3vh;
 }
 
-.battleship-grid-player-one, .battleship-grid-player-two {
+.battleship-grid-player-one,
+.battleship-grid-player-two {
   display: grid;
   grid-template-rows: repeat(11, 50px);
   grid-template-columns: repeat(10, 50px);
   margin-bottom: 0;
   padding-bottom: 0;
-  height:max-content;
+  height: max-content;
 }
 
-.battleship-grid-player-one > div, .battleship-grid-player-two > div  {
+.battleship-grid-player-one > div,
+.battleship-grid-player-two > div {
   border: 1px aliceblue solid;
 }
 
-.player-one-header, .player-two-header {
+.player-one-header,
+.player-two-header {
   grid-column: span 10;
   border: 0 !important;
   justify-self: center;
