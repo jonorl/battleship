@@ -1,6 +1,7 @@
 //Imports
 
 import { Ship, Player } from "./class";
+import {mouseDown} from "./dragndrop"
 
 // variables
 
@@ -9,11 +10,89 @@ const btn = document.querySelector("button");
 let gameOver = false;
 let lastHitCPU = [];
 const opponentBoard = document.querySelector(".battleship-grid-player-two");
+const playerBoard = document.querySelector(".battleship-grid-player-one");
 const playInstructions = document.querySelector(".play-instructions");
 let player1 = new Player("Player 1", "human");
 let player2 = new Player("Computer", "cpu");
 
+console.log(document.querySelector(".ship-five").getAttribute('data-direction'))
+
+// DOM Functions
+
 export function startNewGame() {
+  // Create ships
+  let shipsArray1 = [];
+  let shipsArray2 = [];
+
+  const shipFive = document.querySelector(".ship-five")
+  const shipFour = document.querySelector('.ship-four')
+  const shipThree = document.querySelector('.ship-three')
+  const shipTwo = document.querySelector('.ship-two')
+
+  // Ships Player 1 (random placement)
+  const shipFivePlOne = new Ship(
+    shipFive.getAttribute("data-len"),shipFive.getAttribute("data-direction")
+    );
+  shipsArray1.push(shipFivePlOne);
+  const shipFourPlOne = new Ship(
+    shipFour.getAttribute("data-len"),shipFour.getAttribute("data-direction")
+  );
+  shipsArray1.push(shipFourPlOne);
+  const shipThreePlOne = new Ship(
+    shipThree.getAttribute("data-len"),shipThree.getAttribute("data-direction")
+  );
+  shipsArray1.push(shipThreePlOne);
+  const shipTwoPlOne = new Ship(
+    shipTwo.getAttribute("data-len"),shipTwo.getAttribute("data-direction")
+  );
+  shipsArray1.push(shipTwoPlOne);
+
+  // Ships Player 2
+
+  const shipFivePlTwo = new Ship(
+    5,
+    Math.round(Math.random()) ? "vertical" : "horizontal"
+  );
+  shipsArray2.push(shipFivePlTwo);
+  const shipFourPlTwo = new Ship(
+    4,
+    Math.round(Math.random()) ? "vertical" : "horizontal"
+  );
+  shipsArray2.push(shipFourPlTwo);
+  const shipThreePlTwo = new Ship(
+    3,
+    Math.round(Math.random()) ? "vertical" : "horizontal"
+  );
+  shipsArray2.push(shipThreePlTwo);
+  const shipTwoPlTwo = new Ship(
+    2,
+    Math.round(Math.random()) ? "vertical" : "horizontal"
+  );
+  shipsArray2.push(shipTwoPlTwo);
+
+  // Assign ships in ShipsArray to player boards
+
+  shipsArray2.forEach((ship) => {
+    let placed = false;
+
+    while (!placed) {
+      const x = Math.floor(Math.random() * 10);
+      const y = Math.floor(Math.random() * 10);
+
+      if (
+        player2.playerGameboard.placeShips(ship, x, y, player2) !==
+          "overlapping ships are not allowed" &&
+        player2.playerGameboard.placeShips(ship, x, y, player2) !==
+          "Error placement out of bounds"
+      ) {
+        renderShips(x, y, player2, ship);
+        placed = true;
+      }
+    }
+  });
+}
+
+export function startNewGameRandom() {
   // Create ships
   let shipsArray1 = [];
   let shipsArray2 = [];
@@ -333,6 +412,17 @@ function resetBoards() {
       player2 = new Player("Computer", "cpu");
     }
   }
+}
+
+export function dropAndAddShip(e) {
+
+let shipName = e.target.className
+let x = e.clientX
+let y = e.clientY
+let shipDiv = document.elementFromPoint(x, y)
+let coordX = shipDiv.getAttribute("data-x")
+let coordY = shipDiv.getAttribute("data-y")
+
 }
 
 // Event Listeners
