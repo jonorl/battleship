@@ -1,51 +1,72 @@
 //Imports
 
 import { Ship, Player } from "./class";
-import {mouseDown} from "./dragndrop"
 
 // variables
 
 let adj = false;
-const btn = document.querySelector("button");
+const btn = document.querySelector(".new-game");
+const directionBtn = document.querySelector(".direction");
 let gameOver = false;
 let lastHitCPU = [];
 const opponentBoard = document.querySelector(".battleship-grid-player-two");
 const playerBoard = document.querySelector(".battleship-grid-player-one");
+const randomise = document.querySelector(".randomise");
 const playInstructions = document.querySelector(".play-instructions");
+const shipObj = {
+  shipFive: { len: null, direction: null, coordX: null, coordY: null },
+  shipFour: { len: null, direction: null, coordX: null, coordY: null },
+  shipThree: { len: null, direction: null, coordX: null, coordY: null },
+  shipTwo: { len: null, direction: null, coordX: null, coordY: null },
+};
+let randomiseButton = false;
 let player1 = new Player("Player 1", "human");
 let player2 = new Player("Computer", "cpu");
 
-console.log(document.querySelector(".ship-five").getAttribute('data-direction'))
-
 // DOM Functions
+
+function playerOneStart(shipObject, oldShipName) {
+  const ship = new Ship(Number(shipObject.len), shipObject.direction);
+
+  const x = Number(shipObject.coordX);
+  const y = Number(shipObject.coordY);
+  let canBePlaced = [];
+
+  for (let i = 0; i < Number(shipObject.len); i++) {
+    if (shipObject.direction === "horizontal") {
+      if (player1.playerGameboard.board[y][x + i] !== 0) {
+        canBePlaced.push(1);
+      }
+    }
+    if (shipObject.direction === "vertical") {
+      if (player1.playerGameboard.board[y + i][x] !== 0) {
+        canBePlaced.push(1);
+      }
+    }
+  }
+  if (canBePlaced.length === 0) {
+    const shipPlacement = player1.playerGameboard.placeShips(
+      ship,
+      x,
+      y,
+      player1
+    );
+    if (
+      shipPlacement !== "Error placement out of bounds" &&
+      shipPlacement !== "overlapping ships are not allowed"
+    ) {
+      renderShips(x, y, player1, ship);
+      oldShipName.style.all = "unset";
+      oldShipName.removeAttribute("draggable");
+      player1.playerGameboard.placeShips(ship, x, y, player1);
+    }
+  }
+}
 
 export function startNewGame() {
   // Create ships
-  let shipsArray1 = [];
+
   let shipsArray2 = [];
-
-  const shipFive = document.querySelector(".ship-five")
-  const shipFour = document.querySelector('.ship-four')
-  const shipThree = document.querySelector('.ship-three')
-  const shipTwo = document.querySelector('.ship-two')
-
-  // Ships Player 1 (random placement)
-  const shipFivePlOne = new Ship(
-    shipFive.getAttribute("data-len"),shipFive.getAttribute("data-direction")
-    );
-  shipsArray1.push(shipFivePlOne);
-  const shipFourPlOne = new Ship(
-    shipFour.getAttribute("data-len"),shipFour.getAttribute("data-direction")
-  );
-  shipsArray1.push(shipFourPlOne);
-  const shipThreePlOne = new Ship(
-    shipThree.getAttribute("data-len"),shipThree.getAttribute("data-direction")
-  );
-  shipsArray1.push(shipThreePlOne);
-  const shipTwoPlOne = new Ship(
-    shipTwo.getAttribute("data-len"),shipTwo.getAttribute("data-direction")
-  );
-  shipsArray1.push(shipTwoPlOne);
 
   // Ships Player 2
 
@@ -183,7 +204,6 @@ export function startNewGameRandom() {
 
 function renderShips(x, y, player, ship) {
   if (player.playerName === "Player 1") {
-
     // Ships rendering of vertical
 
     if (ship.direction === "vertical") {
@@ -205,13 +225,13 @@ function renderShips(x, y, player, ship) {
         }
       }
     } else {
-
       // Ships rendering for horizontal
 
       for (let i = 0; i < ship.shipLen; i++) {
         const shipDiv = document.querySelector(
           `.battleship-grid-player-one div[data-x="${x + i}"][data-y="${y}"]`
         );
+
         shipDiv.style.background = "red";
         shipDiv.style.borderLeft = "none";
         shipDiv.style.borderRight = "none";
@@ -247,6 +267,13 @@ function renderShips(x, y, player, ship) {
 }
 
 function renderOpponentBoard(x, y) {
+  if (randomiseButton === false) {
+    if (hasNonNullGrandchildren(shipObj) === false) {
+      playInstructions.textContent =
+        "Please place all ships in your board, or randomise them";
+      return;
+    }
+  }
   const shipDiv = document.querySelector(
     `.battleship-grid-player-two div[data-x="${x}"][data-y="${y}"]`
   );
@@ -261,6 +288,7 @@ function renderOpponentBoard(x, y) {
   } else if (receiveAttackResult === "Game Over") {
     shipDiv.style.background = "red";
     playInstructions.textContent = "Game Over, you win!";
+    randomiseButton = false;
     gameOver = true;
     return;
   }
@@ -272,7 +300,6 @@ function renderOpponentBoard(x, y) {
 // next move
 
 function opponentTurn() {
-
   // first conditional to check if computer has hit a ship so that it tries
   // hitting adjacent tiles going left, right, up and down unless tile was
   // hit already.
@@ -329,12 +356,11 @@ function opponentTurn() {
         y
       );
       return;
-    } 
-    
+    }
+
     // If all adjacent tiles have been hit, reset the bool var and randomise
     // next attack. lastHitCPU is a queue to hit the consecutive adjacent tiles
     // after hitting the first one.
-    
     else {
       lastHitCPU = lastHitCPU.slice(2);
       if (lastHitCPU.length === 0) {
@@ -357,7 +383,6 @@ function opponentTurn() {
   let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
   resultAttackNextMove(receiveAttackResult, shipDiv, x, y);
 }
-
 
 // Helper function to attack a tile, unless it's already been hit or
 // it's out of bounds.
@@ -384,6 +409,7 @@ function resultAttackNextMove(receiveAttackResult, shipDiv, x, y) {
     shipDiv.style.alignItems = "center";
     shipDiv.style.fontSize = "50px";
     playInstructions.textContent = "Game Over, you lose!";
+    randomiseButton = false;
     gameOver = true;
     return;
   } else playInstructions.textContent = "Player's turn";
@@ -414,18 +440,140 @@ function resetBoards() {
   }
 }
 
+// This function takes the data from the drop-point and takes all its relevant data.
+
 export function dropAndAddShip(e) {
+  const shipName = e.target.className.replace("-", "");
+  const direction = e.target.dataset.direction;
+  const len = e.target.dataset.len;
+  const x = e.clientX;
+  const y = e.clientY;
 
-let shipName = e.target.className
-let x = e.clientX
-let y = e.clientY
-let shipDiv = document.elementFromPoint(x, y)
-let coordX = shipDiv.getAttribute("data-x")
-let coordY = shipDiv.getAttribute("data-y")
+  // check if placement is out of bounds
+  const elements = document.elementsFromPoint(x, y);
 
+  let tmp = [];
+  for (let i = 0; i < elements.length; i++) {
+    tmp.push(elements[i].className);
+  }
+  if (!tmp.includes("battleship-grid-player-one")) {
+    return;
+  }
+
+  const shipDiv = document.elementFromPoint(x, y);
+  const coordX = shipDiv.getAttribute("data-x");
+  const coordY = shipDiv.getAttribute("data-y");
+  const oldShipName = document.querySelector("." + e.target.className);
+
+  if (player1.playerGameboard.board[coordX][coordY] !== 0) {
+    return;
+  }
+
+  shipObj[shipName].len = len;
+  shipObj[shipName].direction = direction;
+  shipObj[shipName].coordX = coordX;
+  shipObj[shipName].coordY = coordY;
+
+  if (
+    shipObj[shipName].direction === "horizontal" &&
+    Number(shipObj[shipName].coordX) + Number(shipObj[shipName].len) > 9
+  ) {
+    shipObj[shipName].coordX = 10 - Number(shipObj[shipName].len);
+  }
+  if (
+    shipObj[shipName].direction === "vertical" &&
+    Number(shipObj[shipName].coordY) + Number(shipObj[shipName].len) > 9
+  ) {
+    shipObj[shipName].coordY = 10 - Number(shipObj[shipName].len);
+  }
+
+  playerOneStart(shipObj[shipName], oldShipName);
 }
 
+function invertDirection() {
+  const dragAndDropShipsContainer = document.querySelector(
+    ".drag-and-drop-ships-container"
+  );
+  const shipFive = document.querySelector(".ship-Five");
+  const shipFour = document.querySelector(".ship-Four");
+  const shipThree = document.querySelector(".ship-Three");
+  const shipTwo = document.querySelector(".ship-Two");
+
+  if (
+    directionBtn.textContent === "Direction" ||
+    directionBtn.textContent === "Vertical"
+  ) {
+    dragAndDropShipsContainer.style.gridTemplateRows =
+      "50px 50px 50px 50px 50px";
+    dragAndDropShipsContainer.style.gridTemplateColumns = "repeat(3, 50px)";
+    dragAndDropShipsContainer.style.rowGap = "0";
+    dragAndDropShipsContainer.style.columnGap = "1 vw";
+    shipFive.style.gridColumn = "span 1";
+    shipFive.style.gridRow = "span 5";
+    shipFive.removeAttribute("data-direction");
+    shipFive.setAttribute("data-direction", "vertical");
+    shipFour.style.gridColumn = "span 1";
+    shipFour.style.gridRow = "span 4";
+    shipFour.removeAttribute("data-direction");
+    shipFour.setAttribute("data-direction", "vertical");
+    shipThree.style.gridColumn = "span 1";
+    shipThree.style.gridRow = "span 3";
+    shipThree.removeAttribute("data-direction");
+    shipThree.setAttribute("data-direction", "vertical");
+    shipTwo.style.gridColumn = "span 1";
+    shipTwo.style.gridRow = "span 2";
+    shipTwo.removeAttribute("data-direction");
+    shipTwo.setAttribute("data-direction", "vertical");
+    directionBtn.textContent = "Horizontal";
+  } else if (directionBtn.textContent === "Horizontal") {
+    dragAndDropShipsContainer.style.gridTemplateRows = "repeat(3, 50px)";
+    dragAndDropShipsContainer.style.gridTemplateColumns =
+      "50px 50px 50px 50px 50px";
+    dragAndDropShipsContainer.style.rowGap = "1 vw";
+    dragAndDropShipsContainer.style.columnGap = "0";
+    shipFive.style.gridColumn = "span 5";
+    shipFive.style.gridRow = "span 1";
+    shipFive.removeAttribute("data-direction");
+    shipFive.setAttribute("data-direction", "horizontal");
+    shipFour.style.gridColumn = "span 4";
+    shipFour.style.gridRow = "span 1";
+    shipFour.removeAttribute("data-direction");
+    shipFour.setAttribute("data-direction", "horizontal");
+    shipThree.style.gridColumn = "span 3";
+    shipThree.style.gridRow = "span 1";
+    shipThree.removeAttribute("data-direction");
+    shipThree.setAttribute("data-direction", "horizontal");
+    shipTwo.style.gridColumn = "span 2";
+    shipTwo.style.gridRow = "span 1";
+    shipTwo.removeAttribute("data-direction");
+    shipTwo.setAttribute("data-direction", "horizontal");
+    directionBtn.textContent = "Vertical";
+  }
+}
+
+// Helper function to check shipObj grandchildren
+function hasNonNullGrandchildren(obj) {
+  for (const key in obj) {
+    const value = obj[key];
+    if (typeof value === "object" && value !== null) {
+      if (hasNonNullGrandchildren(value)) {
+        return true;
+      }
+    } else if (value !== null) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function resetShowShips(){
+  
+}
+
+
 // Event Listeners
+
+directionBtn.addEventListener("click", invertDirection);
 
 opponentBoard.addEventListener("click", (event) => {
   if (gameOver === false) {
@@ -437,9 +585,26 @@ opponentBoard.addEventListener("click", (event) => {
 });
 
 btn.addEventListener("click", function () {
+  gameOver = false;
   resetBoards();
   startNewGame();
+  playInstructions.textContent =
+    "To start the game click anywhere on the opponent board.";
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("dragend", dragstartHandler);
+});
+
+function dragstartHandler(ev) {
+  dropAndAddShip(ev);
+}
+
+randomise.addEventListener("click", function () {
   gameOver = false;
+  resetBoards();
+  randomiseButton = true;
+  startNewGameRandom();
   playInstructions.textContent =
     "To start the game click anywhere on the opponent board.";
 });

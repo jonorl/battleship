@@ -11,7 +11,8 @@
   </head>
   <body>
     <div class="main-container">
-      <button class="new-game">Start new game!</button>
+      <button class="new-game">Restart Game!</button>
+      <button class="randomise">Randomise board</button>
       <div class="battleship-grid-player-one">
         <div class="player-one-header">Player's Board</div>
         <div data-x="0" data-y="0"></div>
@@ -118,18 +119,30 @@
       <div class="ships-container">
         <button class="direction">Direction</button>
         <div class="drag-and-drop-ships-container">
-          <div class="ship-five-container">
-            <div class="ship-five" data-direction="horizontal" data-len="5" draggable="true"></div>
-          </div>
-          <div class="ship-four-container">
-            <div class="ship-four" data-direction="horizontal" data-len="4" draggable="true"></div>
-          </div>
-          <div class="ship-three-container">
-            <div class="ship-three" data-direction="horizontal" data-len="3" draggable="true"></div>
-          </div>
-          <div class="ship-two-container">
-            <div class="ship-two" data-direction="horizontal" data-len="2" draggable="true"></div>
-          </div>
+          <div
+            class="ship-Five"
+            data-direction="horizontal"
+            data-len="5"
+            draggable="true"
+          ></div>
+          <div
+            class="ship-Four"
+            data-direction="horizontal"
+            data-len="4"
+            draggable="true"
+          ></div>
+          <div
+            class="ship-Three"
+            data-direction="horizontal"
+            data-len="3"
+            draggable="true"
+          ></div>
+          <div
+            class="ship-Two"
+            data-direction="horizontal"
+            data-len="2"
+            draggable="true"
+          ></div>
         </div>
       </div>
       <div class="battleship-grid-player-two">
@@ -238,7 +251,8 @@
     </div>
 
     <div class="play-instructions">
-      To start the game click anywhere on the opponent board.
+      To start the game Place ships by dragging them to the left board or hit
+      the randomise button.
     </div>
   </body>
 </html>

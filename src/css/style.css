@@ -17,8 +17,22 @@
   height: max-content;
 }
 
+.randomise {
+  /* grid-column: span 1; */
+  grid-column: 1;
+  grid-row: 1;
+  padding: 1vh;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
+  border-radius: 25px;
+  border: solid aliceblue 3px;
+}
+
 .new-game {
-  grid-column: span 3;
+  grid-column: 2 / span 2;
+  grid-row: 1;
+  justify-self: left;
+  margin-left: 9vw;
   padding: 1vh;
   margin-top: 3vh;
   margin-bottom: 3vh;
@@ -64,93 +78,50 @@
 
 .drag-and-drop-ships-container{
   display: grid;
-  /* grid-template-columns: 50px 50px 50px 50px 50px; */
-  grid-template-rows: repeat(4, 50px);
+  grid-template-rows: repeat(3, 50px);
+  grid-template-columns: 50px 50px 50px 50px 50px;
   row-gap: 1vh;
   border: solid 3px aliceblue;
   padding: 5px;
 }
 
-.ship-five-container{
-  display: grid;
-  grid-template-columns: 50px 50px 50px 50px 50px;
-}
-
-.ship-five{
+.ship-Five{
   grid-column: span 5;
-  grid-row-start: 1;
-  grid-column-start: 1;
-  height: 40px;
-  width: 240px;
   background: red;
   border-top: dashed white 3px;
   border-bottom: dashed white 3px;
   border-left: dashed white 3px;
   border-radius: 25px;
   border-right: dashed white 3px;
-  position: fixed;
 }
 
-.ship-four-container{
-  display: grid;
-  grid-template-columns: 50px 50px 50px 50px 50px;
-}
 
-.ship-four{
+.ship-Four{
   grid-column: span 4;
-  grid-row-start: 2;
-  grid-column-start: 1;
-  height: 40px;
-  width: 200px;
   background: red;
   border-top: dashed white 3px;
   border-bottom: dashed white 3px;
   border-left: dashed white 3px;
   border-radius: 25px;
   border-right: dashed white 3px;
-  position: fixed;
 }
 
-.ship-three-container{
-  display: grid;
-  grid-template-columns: 50px 50px 50px 50px 50px;
-}
-
-.ship-three{
-  display: grid;
-  grid-template-columns: 50px 50px 50px 50px 50px;
+.ship-Three{
   grid-column: span 3;
-  grid-row-start: 3;
-  grid-column-start: 1;
-  height: 40px;
-  width: 160px;
   background: red;
   border-top: dashed white 3px;
   border-bottom: dashed white 3px;
   border-left: dashed white 3px;
   border-radius: 25px;
   border-right: dashed white 3px;
-  position: fixed;
 }
 
-.ship-two-container{
-  display: grid;
-  grid-template-columns: 50px 50px 50px 50px 50px;
-}
-
-.ship-two{
-  display: grid;
-  grid-template-columns: 50px 50px 50px 50px 50px;
+.ship-Two{
   grid-column: span 2;
-  grid-row-start: 4;
-  grid-column-start: 3;
-  height: 40px;
-  width: 120px;
   background: red;
   border-top: dashed white 3px;
   border-bottom: dashed white 3px;
   border-left: dashed white 3px;
   border-radius: 25px;
   border-right: dashed white 3px;
-  position: fixed;
 }
