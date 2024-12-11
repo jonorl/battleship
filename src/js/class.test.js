@@ -124,8 +124,7 @@ test("Ship recieves attack", () => {
   const ship = new Ship(5, "vertical");
   const player = new Player("Jon", "human");
   player.playerGameboard.placeShips(ship, 3, 4, player);
-  player.playerGameboard.receiveAttack(3, 4);
-  expect(player.playerGameboard.receiveAttack(4, 3)).toBe(true);
+  expect(player.playerGameboard.receiveAttack(3, 4)).toBe(true);
 });
 
 test("Ship sinks after being hit shipLen times", () => {
@@ -149,7 +148,6 @@ test("Trigger Game Over", () => {
   player.playerGameboard.receiveAttack(3, 5);
   player.playerGameboard.receiveAttack(3, 6);
   player.playerGameboard.receiveAttack(3, 7);
-  player.playerGameboard.receiveAttack(3, 8);
   expect(player.playerGameboard.receiveAttack(3, 8)).toBe("Game Over");
 });
 
@@ -165,8 +163,7 @@ test("More than one ship", () => {
   player.playerGameboard.receiveAttack(3, 7);
   player.playerGameboard.receiveAttack(3, 8);
   player.playerGameboard.receiveAttack(5, 7);
-  player.playerGameboard.receiveAttack(6, 7);
-  expect(player.playerGameboard.receiveAttack(3, 8)).toBe("Game Over");
+  expect(player.playerGameboard.receiveAttack(6, 7)).toBe("Game Over");
 });
 
 // Player Class related testing:
