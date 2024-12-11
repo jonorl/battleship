@@ -4,19 +4,21 @@ import { Ship, Player } from "./class";
 
 // variables
 
+let adj = false;
 const btn = document.querySelector("button");
+let gameOver = false;
+let lastHitCPU = [];
+const opponentBoard = document.querySelector(".battleship-grid-player-two");
+const playInstructions = document.querySelector(".play-instructions");
 let player1 = new Player("Player 1", "human");
 let player2 = new Player("Computer", "cpu");
-const playInstructions = document.querySelector(".play-instructions");
-const opponentBoard = document.querySelector(".battleship-grid-player-two");
-let lastHitCPU = [];
-let adj = false;
-let gameOver = false;
 
 export function startNewGame() {
   // Create ships
   let shipsArray1 = [];
   let shipsArray2 = [];
+
+  // Ships Player 1 (random placement)
   const shipFivePlOne = new Ship(
     5,
     Math.round(Math.random()) ? "vertical" : "horizontal"
@@ -37,6 +39,9 @@ export function startNewGame() {
     Math.round(Math.random()) ? "vertical" : "horizontal"
   );
   shipsArray1.push(shipTwoPlOne);
+
+  // Ships Player 2
+
   const shipFivePlTwo = new Ship(
     5,
     Math.round(Math.random()) ? "vertical" : "horizontal"
@@ -58,7 +63,7 @@ export function startNewGame() {
   );
   shipsArray2.push(shipTwoPlTwo);
 
-  // Assign ships to player boards
+  // Assign ships in ShipsArray to player boards
   shipsArray1.forEach((ship) => {
     let placed = false;
 
@@ -99,6 +104,9 @@ export function startNewGame() {
 
 function renderShips(x, y, player, ship) {
   if (player.playerName === "Player 1") {
+
+    // Ships rendering of vertical
+
     if (ship.direction === "vertical") {
       for (let i = 0; i < ship.shipLen; i++) {
         const shipDiv = document.querySelector(
@@ -118,6 +126,9 @@ function renderShips(x, y, player, ship) {
         }
       }
     } else {
+
+      // Ships rendering for horizontal
+
       for (let i = 0; i < ship.shipLen; i++) {
         const shipDiv = document.querySelector(
           `.battleship-grid-player-one div[data-x="${x + i}"][data-y="${y}"]`
@@ -136,7 +147,7 @@ function renderShips(x, y, player, ship) {
         }
       }
     }
-  } // need to get rid of rendering the computer's side once everything is tested
+  } // Add this code if you want to have a peek at opponent's ships
   // else {
   //   if (ship.direction === "vertical") {
   //     for (let i = 0; i < ship.shipLen; i++) {
@@ -177,7 +188,16 @@ function renderOpponentBoard(x, y) {
   opponentTurn();
 }
 
+// function to make the opponent (computer) play its turn. I could add a timer
+// setting so that the person playing thinks the computer is "thinking" its
+// next move
+
 function opponentTurn() {
+
+  // first conditional to check if computer has hit a ship so that it tries
+  // hitting adjacent tiles going left, right, up and down unless tile was
+  // hit already.
+
   if (adj === true && lastHitCPU !== 0) {
     let x = lastHitCPU[0];
     let y = lastHitCPU[1];
@@ -230,7 +250,13 @@ function opponentTurn() {
         y
       );
       return;
-    } else {
+    } 
+    
+    // If all adjacent tiles have been hit, reset the bool var and randomise
+    // next attack. lastHitCPU is a queue to hit the consecutive adjacent tiles
+    // after hitting the first one.
+    
+    else {
       lastHitCPU = lastHitCPU.slice(2);
       if (lastHitCPU.length === 0) {
         adj = false;
@@ -242,6 +268,8 @@ function opponentTurn() {
     }
   }
 
+  // After all adjacent tiles have been hit, start randomising the next attack.
+
   let x = Math.floor(Math.random() * 10);
   let y = Math.floor(Math.random() * 10);
   let shipDiv = document.querySelector(
@@ -250,6 +278,10 @@ function opponentTurn() {
   let receiveAttackResult = player1.playerGameboard.receiveAttack(x, y);
   resultAttackNextMove(receiveAttackResult, shipDiv, x, y);
 }
+
+
+// Helper function to attack a tile, unless it's already been hit or
+// it's out of bounds.
 
 function resultAttackNextMove(receiveAttackResult, shipDiv, x, y) {
   if (receiveAttackResult === "water") {
