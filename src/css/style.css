@@ -18,10 +18,9 @@
 }
 
 .randomise {
-  /* grid-column: span 1; */
   grid-column: 1;
   grid-row: 1;
-  padding: 1vh;
+  padding: 15px;
   margin-top: 3vh;
   margin-bottom: 3vh;
   border-radius: 25px;
@@ -29,15 +28,21 @@
 }
 
 .new-game {
-  grid-column: 2 / span 2;
+  grid-column: 2;
   grid-row: 1;
-  justify-self: left;
-  margin-left: 9vw;
-  padding: 1vh;
+  padding: 15px;
   margin-top: 3vh;
   margin-bottom: 3vh;
   border-radius: 25px;
+  justify-items: center;
   border: solid aliceblue 3px;
+}
+
+.direction {
+  padding: 15px;
+  border-radius: 25px;
+  border: solid aliceblue 3px;
+  margin-bottom: 3vh;
 }
 
 .play-instructions {
@@ -51,11 +56,18 @@
 .battleship-grid-player-one,
 .battleship-grid-player-two {
   display: grid;
+  grid-column: 1;
+  grid-row: 2;
   grid-template-rows: repeat(11, 50px);
   grid-template-columns: repeat(10, 50px);
   margin-bottom: 0;
   padding-bottom: 0;
   height: max-content;
+}
+
+.battleship-grid-player-two {
+  grid-column: 3;
+  grid-row: 2;
 }
 
 .battleship-grid-player-one > div,
@@ -70,13 +82,15 @@
   justify-self: center;
 }
 
-.ships-container{
+.ships-container {
   display: grid;
+  grid-column: 2;
+  grid-row: 2;
   align-self: center;
   row-gap: 3vh;
 }
 
-.drag-and-drop-ships-container{
+.drag-and-drop-ships-container {
   display: grid;
   grid-template-rows: repeat(3, 50px);
   grid-template-columns: 50px 50px 50px 50px 50px;
@@ -85,18 +99,17 @@
   padding: 5px;
 }
 
-.ship-Five{
+.ship-Five {
   grid-column: span 5;
   background: red;
   border-top: dashed white 3px;
   border-bottom: dashed white 3px;
   border-left: dashed white 3px;
-  border-radius: 25px;
   border-right: dashed white 3px;
+  border-radius: 25px;
 }
 
-
-.ship-Four{
+.ship-Four {
   grid-column: span 4;
   background: red;
   border-top: dashed white 3px;
@@ -106,7 +119,7 @@
   border-right: dashed white 3px;
 }
 
-.ship-Three{
+.ship-Three {
   grid-column: span 3;
   background: red;
   border-top: dashed white 3px;
@@ -116,7 +129,7 @@
   border-right: dashed white 3px;
 }
 
-.ship-Two{
+.ship-Two {
   grid-column: span 2;
   background: red;
   border-top: dashed white 3px;

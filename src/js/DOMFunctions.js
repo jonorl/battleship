@@ -1,16 +1,16 @@
 //Imports
 
 import { Ship, Player } from "./class";
+import { invertDirection, resetShowShips } from "./CSSFunctions";
 
-// variables
+// Global variables
 
 let adj = false;
 const btn = document.querySelector(".new-game");
-const directionBtn = document.querySelector(".direction");
+export const directionBtn = document.querySelector(".direction");
 let gameOver = false;
 let lastHitCPU = [];
 const opponentBoard = document.querySelector(".battleship-grid-player-two");
-const playerBoard = document.querySelector(".battleship-grid-player-one");
 const randomise = document.querySelector(".randomise");
 const playInstructions = document.querySelector(".play-instructions");
 const shipObj = {
@@ -19,7 +19,7 @@ const shipObj = {
   shipThree: { len: null, direction: null, coordX: null, coordY: null },
   shipTwo: { len: null, direction: null, coordX: null, coordY: null },
 };
-let randomiseButton = false;
+export let randomiseButton = false;
 let player1 = new Player("Player 1", "human");
 let player2 = new Player("Computer", "cpu");
 
@@ -64,7 +64,7 @@ function playerOneStart(shipObject, oldShipName) {
 }
 
 export function startNewGame() {
-  // Create ships
+  // Create opponent ships
 
   let shipsArray2 = [];
 
@@ -112,6 +112,8 @@ export function startNewGame() {
     }
   });
 }
+
+// Same as startNewGame but adding random ship placement for player1
 
 export function startNewGameRandom() {
   // Create ships
@@ -267,6 +269,9 @@ function renderShips(x, y, player, ship) {
 }
 
 function renderOpponentBoard(x, y) {
+  // Check if playing on a random placement game, if not, check if all ships are placed
+  // before starting
+
   if (randomiseButton === false) {
     if (hasNonNullGrandchildren(shipObj) === false) {
       playInstructions.textContent =
@@ -274,6 +279,7 @@ function renderOpponentBoard(x, y) {
       return;
     }
   }
+
   const shipDiv = document.querySelector(
     `.battleship-grid-player-two div[data-x="${x}"][data-y="${y}"]`
   );
@@ -415,6 +421,8 @@ function resultAttackNextMove(receiveAttackResult, shipDiv, x, y) {
   } else playInstructions.textContent = "Player's turn";
 }
 
+// After a game is over, reset everything, players, boards and ships.
+
 function resetBoards() {
   for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
@@ -490,67 +498,6 @@ export function dropAndAddShip(e) {
   playerOneStart(shipObj[shipName], oldShipName);
 }
 
-function invertDirection() {
-  const dragAndDropShipsContainer = document.querySelector(
-    ".drag-and-drop-ships-container"
-  );
-  const shipFive = document.querySelector(".ship-Five");
-  const shipFour = document.querySelector(".ship-Four");
-  const shipThree = document.querySelector(".ship-Three");
-  const shipTwo = document.querySelector(".ship-Two");
-
-  if (
-    directionBtn.textContent === "Direction" ||
-    directionBtn.textContent === "Vertical"
-  ) {
-    dragAndDropShipsContainer.style.gridTemplateRows =
-      "50px 50px 50px 50px 50px";
-    dragAndDropShipsContainer.style.gridTemplateColumns = "repeat(3, 50px)";
-    dragAndDropShipsContainer.style.rowGap = "0";
-    dragAndDropShipsContainer.style.columnGap = "1 vw";
-    shipFive.style.gridColumn = "span 1";
-    shipFive.style.gridRow = "span 5";
-    shipFive.removeAttribute("data-direction");
-    shipFive.setAttribute("data-direction", "vertical");
-    shipFour.style.gridColumn = "span 1";
-    shipFour.style.gridRow = "span 4";
-    shipFour.removeAttribute("data-direction");
-    shipFour.setAttribute("data-direction", "vertical");
-    shipThree.style.gridColumn = "span 1";
-    shipThree.style.gridRow = "span 3";
-    shipThree.removeAttribute("data-direction");
-    shipThree.setAttribute("data-direction", "vertical");
-    shipTwo.style.gridColumn = "span 1";
-    shipTwo.style.gridRow = "span 2";
-    shipTwo.removeAttribute("data-direction");
-    shipTwo.setAttribute("data-direction", "vertical");
-    directionBtn.textContent = "Horizontal";
-  } else if (directionBtn.textContent === "Horizontal") {
-    dragAndDropShipsContainer.style.gridTemplateRows = "repeat(3, 50px)";
-    dragAndDropShipsContainer.style.gridTemplateColumns =
-      "50px 50px 50px 50px 50px";
-    dragAndDropShipsContainer.style.rowGap = "1 vw";
-    dragAndDropShipsContainer.style.columnGap = "0";
-    shipFive.style.gridColumn = "span 5";
-    shipFive.style.gridRow = "span 1";
-    shipFive.removeAttribute("data-direction");
-    shipFive.setAttribute("data-direction", "horizontal");
-    shipFour.style.gridColumn = "span 4";
-    shipFour.style.gridRow = "span 1";
-    shipFour.removeAttribute("data-direction");
-    shipFour.setAttribute("data-direction", "horizontal");
-    shipThree.style.gridColumn = "span 3";
-    shipThree.style.gridRow = "span 1";
-    shipThree.removeAttribute("data-direction");
-    shipThree.setAttribute("data-direction", "horizontal");
-    shipTwo.style.gridColumn = "span 2";
-    shipTwo.style.gridRow = "span 1";
-    shipTwo.removeAttribute("data-direction");
-    shipTwo.setAttribute("data-direction", "horizontal");
-    directionBtn.textContent = "Vertical";
-  }
-}
-
 // Helper function to check shipObj grandchildren
 function hasNonNullGrandchildren(obj) {
   for (const key in obj) {
@@ -565,11 +512,6 @@ function hasNonNullGrandchildren(obj) {
   }
   return false;
 }
-
-function resetShowShips(){
-  
-}
-
 
 // Event Listeners
 
@@ -586,6 +528,8 @@ opponentBoard.addEventListener("click", (event) => {
 
 btn.addEventListener("click", function () {
   gameOver = false;
+  randomiseButton = false;
+  resetShowShips();
   resetBoards();
   startNewGame();
   playInstructions.textContent =
@@ -604,6 +548,7 @@ randomise.addEventListener("click", function () {
   gameOver = false;
   resetBoards();
   randomiseButton = true;
+  resetShowShips();
   startNewGameRandom();
   playInstructions.textContent =
     "To start the game click anywhere on the opponent board.";
