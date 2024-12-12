@@ -423,6 +423,7 @@ function resultAttackNextMove(receiveAttackResult, shipDiv, x, y) {
     shipDiv.style.justifyContent = "center";
     shipDiv.style.alignItems = "center";
     shipDiv.style.fontSize = "50px";
+
     playInstructions.textContent = "Game Over, you lose!";
     randomiseButton = false;
     gameOver = true;
