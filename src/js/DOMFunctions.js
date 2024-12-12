@@ -56,7 +56,8 @@ function playerOneStart(shipObject, oldShipName) {
       shipPlacement !== "overlapping ships are not allowed"
     ) {
       renderShips(x, y, player1, ship);
-      oldShipName.style.all = "unset";
+      oldShipName.style.background = "none";
+      oldShipName.style.border = "none";
       oldShipName.removeAttribute("draggable");
       player1.playerGameboard.placeShips(ship, x, y, player1);
     }

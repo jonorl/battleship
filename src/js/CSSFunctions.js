@@ -90,15 +90,19 @@ export function resetShowShips() {
   } else {
     shipFive.style.background = "red";
     shipFive.style.border = "dashed white 3px";
+    shipFive.style.borderRadius = "25px";
     shipFive.draggable = "true";
     shipFour.style.background = "red";
     shipFour.style.border = "dashed white 3px";
+    shipFour.style.borderRadius = "25px";
     shipFour.draggable = "true";
     shipThree.style.background = "red";
     shipThree.style.border = "dashed white 3px";
+    shipThree.style.borderRadius = "25px";
     shipThree.draggable = "true";
     shipTwo.style.background = "red";
     shipTwo.style.border = "dashed white 3px";
+    shipTwo.style.borderRadius = "25px";
     shipTwo.draggable = "true";
   }
 }
