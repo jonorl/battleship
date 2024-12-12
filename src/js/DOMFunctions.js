@@ -5,23 +5,31 @@ import { invertDirection, resetShowShips } from "./CSSFunctions";
 
 // Global variables
 
-let adj = false;
-const btn = document.querySelector(".new-game");
+// Query Selectors
+
+const restartGame = document.querySelector(".new-game");
 export const directionBtn = document.querySelector(".direction");
-let gameOver = false;
-let lastHitCPU = [];
 const opponentBoard = document.querySelector(".battleship-grid-player-two");
-const randomise = document.querySelector(".randomise");
 const playInstructions = document.querySelector(".play-instructions");
-const shipObj = {
+const randomise = document.querySelector(".randomise");
+
+// Start game by creating the players
+
+let player1 = new Player("Player 1", "human");
+let player2 = new Player("Computer", "cpu");
+
+// Other variables
+
+let adj = false; // Check if adjacent tiles have been hit (opponent)
+let gameOver = false; // Check if end of game was met and stop event listeners
+let lastHitCPU = []; // Queue for opponent next moves once a player's ship has been hit
+export let randomiseButton = false; // Check if random button was pressed to skip ship placement validations 
+let shipObj = { // Helper object to get data from player's ship placement
   shipFive: { len: null, direction: null, coordX: null, coordY: null },
   shipFour: { len: null, direction: null, coordX: null, coordY: null },
   shipThree: { len: null, direction: null, coordX: null, coordY: null },
   shipTwo: { len: null, direction: null, coordX: null, coordY: null },
 };
-export let randomiseButton = false;
-let player1 = new Player("Player 1", "human");
-let player2 = new Player("Computer", "cpu");
 
 // DOM Functions
 
@@ -447,6 +455,12 @@ function resetBoards() {
       player2 = new Player("Computer", "cpu");
     }
   }
+  shipObj = {
+    shipFive: { len: null, direction: null, coordX: null, coordY: null },
+    shipFour: { len: null, direction: null, coordX: null, coordY: null },
+    shipThree: { len: null, direction: null, coordX: null, coordY: null },
+    shipTwo: { len: null, direction: null, coordX: null, coordY: null },
+  };
 }
 
 // This function takes the data from the drop-point and takes all its relevant data.
@@ -527,7 +541,7 @@ opponentBoard.addEventListener("click", (event) => {
   }
 });
 
-btn.addEventListener("click", function () {
+restartGame.addEventListener("click", function () {
   gameOver = false;
   randomiseButton = false;
   resetShowShips();
